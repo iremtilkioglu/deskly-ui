@@ -1,0 +1,872 @@
+@model deskly_ui.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Ödeme";
+}
+
+<section class="min-h-screen overflow-x-hidden bg-[#F5F5F3] px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
+    <div class="mx-auto w-full max-w-7xl">
+
+        <nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-[#5E7387]"
+             aria-label="Sayfa yolu">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="transition hover:text-[#1E2430]">
+                Ana Sayfa
+            </a>
+
+            <span aria-hidden="true">/</span>
+
+            <a asp-controller="Cart"
+               asp-action="Index"
+               class="transition hover:text-[#1E2430]">
+                Sepetim
+            </a>
+
+            <span aria-hidden="true">/</span>
+
+            <span class="text-[#1E2430]">
+                Ödeme
+            </span>
+        </nav>
+
+        <div class="mt-8 flex flex-col gap-4 border-b border-[#AAB0B7]/25 pb-6 sm:flex-row sm:items-end sm:justify-between">
+
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    Deskly Checkout
+                </p>
+
+                <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                    Teslimat ve ödeme
+                </h1>
+            </div>
+
+            <a asp-controller="Cart"
+               asp-action="Index"
+               class="inline-flex items-center gap-2 text-sm font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                <span>←</span>
+                Sepete dön
+            </a>
+
+        </div>
+
+        <form asp-controller="Cart"
+              asp-action="CompleteOrder"
+              method="post"
+              class="mt-8 grid min-w-0 items-start gap-8 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_380px]">
+
+            @Html.AntiForgeryToken()
+
+            <div class="min-w-0 space-y-6">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="rounded-[20px] border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-600 empty:hidden">
+                </div>
+
+                <!-- İletişim bilgileri -->
+                <section class="rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-6">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                                01
+                            </p>
+
+                            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                                İletişim bilgileri
+                            </h2>
+                        </div>
+
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-sm font-semibold text-[#3F5F7A]">
+                            1
+                        </span>
+
+                    </div>
+
+                    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Ad
+                            </span>
+
+                            <input asp-for="FirstName"
+                                   placeholder="Adınız"
+                                   autocomplete="given-name"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="FirstName"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Soyad
+                            </span>
+
+                            <input asp-for="LastName"
+                                   placeholder="Soyadınız"
+                                   autocomplete="family-name"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="LastName"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                E-posta
+                            </span>
+
+                            <input asp-for="Email"
+                                   placeholder="ornek@email.com"
+                                   autocomplete="email"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="Email"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Telefon
+                            </span>
+
+                            <input asp-for="Phone"
+                                   placeholder="05xx xxx xx xx"
+                                   autocomplete="tel"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="Phone"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                    </div>
+
+                </section>
+
+                <!-- Teslimat adresi -->
+                <section class="rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-6">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                                02
+                            </p>
+
+                            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                                Teslimat adresi
+                            </h2>
+                        </div>
+
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-sm font-semibold text-[#3F5F7A]">
+                            2
+                        </span>
+
+                    </div>
+
+                    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+                        <label class="block sm:col-span-2">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Adres
+                            </span>
+
+                            <textarea asp-for="Address"
+                                      rows="4"
+                                      placeholder="Mahalle, sokak, bina ve daire bilgisi"
+                                      autocomplete="street-address"
+                                      class="w-full resize-none rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 py-3 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15"></textarea>
+
+                            <span asp-validation-for="Address"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Şehir
+                            </span>
+
+                            <input asp-for="City"
+                                   placeholder="İstanbul"
+                                   autocomplete="address-level1"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="City"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                İlçe
+                            </span>
+
+                            <input asp-for="District"
+                                   placeholder="Kadıköy"
+                                   autocomplete="address-level2"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="District"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Posta kodu
+                            </span>
+
+                            <input asp-for="PostalCode"
+                                   placeholder="34000"
+                                   autocomplete="postal-code"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="PostalCode"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Adres başlığı
+                            </span>
+
+                            <input asp-for="AddressTitle"
+                                   placeholder="Ev, İş..."
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white/85 px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="AddressTitle"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                    </div>
+
+                </section>
+
+                <!-- Teslimat yöntemi -->
+                <section class="rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-6">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                                03
+                            </p>
+
+                            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                                Teslimat yöntemi
+                            </h2>
+                        </div>
+
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-sm font-semibold text-[#3F5F7A]">
+                            3
+                        </span>
+
+                    </div>
+
+                    <div class="mt-6 grid gap-4">
+
+                        <label class="cursor-pointer rounded-[22px] border border-[#1E2430] bg-white p-4 transition hover:bg-[#F8FAFB]">
+
+                            <div class="flex items-start gap-4">
+
+                                <input asp-for="ShippingMethod"
+                                       type="radio"
+                                       value="standard"
+                                       class="mt-1 h-4 w-4 accent-[#1E2430]" />
+
+                                <div class="min-w-0 flex-1">
+
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="font-semibold text-[#1E2430]">
+                                            Standart teslimat
+                                        </span>
+
+                                        <span class="shrink-0 text-sm font-semibold text-[#1E2430]">
+                                            ₺149
+                                        </span>
+                                    </div>
+
+                                    <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                                        Tahmini 2–4 iş günü içinde teslim edilir.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <label class="cursor-pointer rounded-[22px] border border-[#AAB0B7]/35 bg-white/65 p-4 transition hover:border-[#3F5F7A] hover:bg-white">
+
+                            <div class="flex items-start gap-4">
+
+                                <input asp-for="ShippingMethod"
+                                       type="radio"
+                                       value="express"
+                                       class="mt-1 h-4 w-4 accent-[#1E2430]" />
+
+                                <div class="min-w-0 flex-1">
+
+                                    <div class="flex items-center justify-between gap-4">
+                                        <span class="font-semibold text-[#1E2430]">
+                                            Hızlı teslimat
+                                        </span>
+
+                                        <span class="shrink-0 text-sm font-semibold text-[#1E2430]">
+                                            ₺249
+                                        </span>
+                                    </div>
+
+                                    <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                                        Uygun bölgelerde ertesi iş günü teslimat.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                        </label>
+
+                        <span asp-validation-for="ShippingMethod"
+                              class="text-xs text-red-500">
+                        </span>
+
+                    </div>
+
+                </section>
+
+                <!-- Ödeme bilgileri -->
+                <section class="rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-6">
+
+                    <div class="flex items-center justify-between gap-4">
+
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                                04
+                            </p>
+
+                            <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                                Ödeme bilgileri
+                            </h2>
+                        </div>
+
+                        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-sm font-semibold text-[#3F5F7A]">
+                            4
+                        </span>
+
+                    </div>
+
+                    <div class="mx-auto mt-6 w-full max-w-[430px]"
+     style="perspective: 1200px;">
+
+    <div id="creditCard"
+         class="relative aspect-[1.586/1] w-full transition-transform duration-700"
+         style="transform-style: preserve-3d;">
+
+        <!-- KARTIN ÖN YÜZÜ -->
+        <div class="absolute inset-0 overflow-hidden rounded-[24px] bg-[#1E2430] p-5 text-white shadow-[0_22px_55px_rgba(30,36,48,0.22)] sm:p-6"
+             style="backface-visibility: hidden;">
+
+            <div class="absolute -right-14 -top-16 h-40 w-40 rounded-full bg-white/5"></div>
+            <div class="absolute -bottom-20 -left-12 h-48 w-48 rounded-full bg-white/5"></div>
+
+            <div class="relative flex h-full flex-col justify-between">
+
+                <div class="flex items-start justify-between gap-4">
+
+                    <div>
+                        <p class="text-[10px] font-medium uppercase tracking-[0.22em] text-white/55">
+                            Deskly Card
+                        </p>
+
+                        <p class="mt-1 text-sm font-semibold text-white/90">
+                            Demo ödeme kartı
+                        </p>
+                    </div>
+
+                    <div id="cardBrand"
+                         class="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.15em]">
+                        CARD
+                    </div>
+
+                </div>
+
+                <p id="cardNumberPreview"
+                   class="font-mono text-lg font-medium tracking-[0.1em] sm:text-xl">
+                    •••• •••• •••• ••••
+                </p>
+
+                <div class="flex items-end justify-between gap-5">
+
+                    <div class="min-w-0">
+                        <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-white/45">
+                            Kart Sahibi
+                        </p>
+
+                        <p id="cardHolderPreview"
+                           class="mt-1 truncate text-sm font-semibold uppercase tracking-wide">
+                            AD SOYAD
+                        </p>
+                    </div>
+
+                    <div class="shrink-0 text-right">
+                        <p class="text-[9px] font-medium uppercase tracking-[0.18em] text-white/45">
+                            Son Kullanma
+                        </p>
+
+                        <p id="cardExpiryPreview"
+                           class="mt-1 font-mono text-sm font-semibold">
+                            AA/YY
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- KARTIN ARKA YÜZÜ -->
+        <div class="absolute inset-0 overflow-hidden rounded-[24px] bg-[#1E2430] text-white shadow-[0_22px_55px_rgba(30,36,48,0.22)]"
+             style="backface-visibility: hidden; transform: rotateY(180deg);">
+
+            <div class="mt-8 h-12 w-full bg-black/70"></div>
+
+            <div class="px-5 pt-6 sm:px-6">
+
+                <p class="text-right text-[9px] font-medium uppercase tracking-[0.18em] text-white/50">
+                    Güvenlik Kodu
+                </p>
+
+                <div class="mt-2 flex items-center overflow-hidden rounded-[10px] bg-white">
+
+                    <div class="h-11 flex-1 bg-[repeating-linear-gradient(135deg,#f3f4f6_0px,#f3f4f6_5px,#ffffff_5px,#ffffff_10px)]"></div>
+
+                    <div id="cardCvvPreview"
+                         class="flex h-11 min-w-[72px] items-center justify-center px-4 font-mono text-sm font-semibold text-[#1E2430]">
+                        •••
+                    </div>
+
+                </div>
+
+                <div class="mt-7 flex items-end justify-between gap-4">
+
+                    <div>
+                        <p class="text-[10px] font-medium uppercase tracking-[0.22em] text-white/50">
+                            Deskly Card
+                        </p>
+
+                        <p class="mt-1 text-xs text-white/70">
+                            Demo ödeme kartı
+                        </p>
+                    </div>
+
+                    <div class="rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold tracking-[0.15em]">
+                        SECURE
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <p class="mt-3 text-center text-xs text-[#7A8794]">
+        CVV alanına geçtiğinizde kartın arka yüzü görüntülenir.
+    </p>
+
+</div>
+
+                    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+
+                        <label class="block sm:col-span-2">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Kart üzerindeki isim
+                            </span>
+
+                            <input asp-for="CardHolder"
+                                   placeholder="Ad Soyad"
+                                   autocomplete="cc-name"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="CardHolder"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block sm:col-span-2">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Kart numarası
+                            </span>
+
+                            <input asp-for="CardNumber"
+                                   inputmode="numeric"
+                                   placeholder="0000 0000 0000 0000"
+                                   autocomplete="cc-number"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="CardNumber"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Son kullanma
+                            </span>
+
+                           <input asp-for="Expiry"
+       id="expiryInput"
+       inputmode="numeric"
+       maxlength="5"
+       placeholder="AA/YY"
+       autocomplete="cc-exp"
+       class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                            <span asp-validation-for="Expiry"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                     <label class="block">
+    <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+        CVV
+    </span>
+
+    <input asp-for="Cvv"
+           id="cvvInput"
+           type="password"
+           inputmode="numeric"
+           maxlength="4"
+           placeholder="•••"
+           autocomplete="cc-csc"
+           class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+    <span asp-validation-for="Cvv"
+          class="mt-2 block text-xs text-red-500">
+    </span>
+</label>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+            <!-- Sipariş özeti -->
+            <aside class="min-w-0 rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_18px_50px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-6 lg:sticky lg:top-6">
+
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    Sipariş Özeti
+                </p>
+
+                <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                    Siparişiniz
+                </h2>
+
+                <div class="mt-6 space-y-3">
+
+                    @foreach (var item in Model.Cart.Items)
+                    {
+                        var selectedVariant = item.Product.Variants
+                            .FirstOrDefault(variant =>
+                                variant.ColorName == item.SelectedColor);
+
+                        var displayImage = selectedVariant?.ImageUrl
+                            ?? item.Product.ImageUrl;
+
+                        <div class="flex min-w-0 gap-3 rounded-[20px] border border-[#AAB0B7]/20 bg-white/55 p-3">
+
+                            <div class="h-16 w-16 shrink-0 overflow-hidden rounded-[14px] bg-[#F5F5F3]">
+                                <img src="@displayImage"
+                                     alt="@item.Product.Name"
+                                     class="h-full w-full object-cover" />
+                            </div>
+
+                            <div class="min-w-0 flex-1">
+
+                                <div class="flex items-start justify-between gap-3">
+
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-semibold text-[#1E2430]">
+                                            @item.Product.Name
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-[#5E7387]">
+                                            @item.Quantity adet
+
+                                            @if (!string.IsNullOrWhiteSpace(item.SelectedColor))
+                                            {
+                                                <span>• @item.SelectedColor</span>
+                                            }
+                                        </p>
+                                    </div>
+
+                                    <span class="shrink-0 text-sm font-semibold text-[#1E2430]">
+                                        ₺@item.TotalPrice.ToString("N0")
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+                <div class="mt-6 space-y-4 border-y border-[#AAB0B7]/25 py-5">
+
+                    <div class="flex items-center justify-between gap-5 text-sm">
+                        <span class="text-[#5E7387]">Ara toplam</span>
+
+                        <span class="font-semibold text-[#1E2430]">
+                            ₺@Model.Cart.Subtotal.ToString("N0")
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-5 text-sm">
+                        <span class="text-[#5E7387]">Kargo</span>
+
+                        <span class="font-semibold text-[#1E2430]">
+                            ₺@Model.Cart.Shipping.ToString("N0")
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between gap-5 text-sm">
+                        <span class="text-[#5E7387]">İndirim</span>
+
+                        <span class="font-semibold text-[#1E2430]">
+                            -₺@Model.Cart.Discount.ToString("N0")
+                        </span>
+                    </div>
+
+                </div>
+
+                <div class="mt-5 flex items-end justify-between gap-4">
+
+                    <div>
+                        <p class="text-sm text-[#5E7387]">
+                            Genel toplam
+                        </p>
+
+                        <p class="mt-1 text-xs text-[#7A8794]">
+                            KDV dahildir
+                        </p>
+                    </div>
+
+                    <p class="shrink-0 text-2xl font-semibold tracking-tight text-[#1E2430] sm:text-3xl">
+                        ₺@Model.Cart.Total.ToString("N0")
+                    </p>
+
+                </div>
+
+                <button type="submit"
+                        class="mt-7 flex w-full items-center justify-center rounded-full bg-[#1E2430] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#3F5F7A]">
+                    Siparişi Tamamla
+                </button>
+
+                <div class="mt-5 rounded-[20px] border border-[#AAB0B7]/25 bg-white/45 p-4">
+
+                    <p class="text-sm font-semibold text-[#1E2430]">
+                        Güvenli ödeme
+                    </p>
+
+                    <p class="mt-2 text-xs leading-6 text-[#5E7387]">
+                        Bu ekran portfolyo demosudur. Kart bilgileriniz kaydedilmez ve gerçek ödeme alınmaz.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </form>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const card = document.getElementById("creditCard");
+
+            const cardHolderInput = document.getElementById("CardHolder");
+            const cardNumberInput = document.getElementById("CardNumber");
+            const expiryInput = document.getElementById("expiryInput");
+            const cvvInput = document.getElementById("cvvInput");
+
+            const cardHolderPreview =
+                document.getElementById("cardHolderPreview");
+
+            const cardNumberPreview =
+                document.getElementById("cardNumberPreview");
+
+            const cardExpiryPreview =
+                document.getElementById("cardExpiryPreview");
+
+            const cardCvvPreview =
+                document.getElementById("cardCvvPreview");
+
+            const cardBrand =
+                document.getElementById("cardBrand");
+
+            const showCardFront = () => {
+                if (card) {
+                    card.style.transform = "rotateY(0deg)";
+                }
+            };
+
+            const showCardBack = () => {
+                if (card) {
+                    card.style.transform = "rotateY(180deg)";
+                }
+            };
+
+            const detectCardBrand = (number) => {
+                const digits = number.replace(/\D/g, "");
+
+                if (/^4/.test(digits)) {
+                    return "VISA";
+                }
+
+                if (/^5[1-5]/.test(digits)) {
+                    return "MASTERCARD";
+                }
+
+                if (/^3[47]/.test(digits)) {
+                    return "AMEX";
+                }
+
+                return "CARD";
+            };
+
+            const formatCardNumber = (value) => {
+                const digits = value
+                    .replace(/\D/g, "")
+                    .slice(0, 16);
+
+                return digits
+                    .replace(/(.{4})/g, "$1 ")
+                    .trim();
+            };
+
+            const updateCardHolder = () => {
+                const value = cardHolderInput?.value.trim();
+
+                if (cardHolderPreview) {
+                    cardHolderPreview.textContent =
+                        value
+                            ? value.toLocaleUpperCase("tr-TR")
+                            : "AD SOYAD";
+                }
+            };
+
+            const updateCardNumber = () => {
+                if (!cardNumberInput) {
+                    return;
+                }
+
+                const formattedValue =
+                    formatCardNumber(cardNumberInput.value);
+
+                cardNumberInput.value = formattedValue;
+
+                if (cardNumberPreview) {
+                    cardNumberPreview.textContent =
+                        formattedValue || "•••• •••• •••• ••••";
+                }
+
+                if (cardBrand) {
+                    cardBrand.textContent =
+                        detectCardBrand(formattedValue);
+                }
+            };
+
+            const updateExpiry = () => {
+                if (!expiryInput) {
+                    return;
+                }
+
+                let value = expiryInput.value
+                    .replace(/\D/g, "")
+                    .slice(0, 4);
+
+                if (value.length >= 3) {
+                    value =
+                        `${value.slice(0, 2)}/${value.slice(2)}`;
+                }
+
+                expiryInput.value = value;
+
+                if (cardExpiryPreview) {
+                    cardExpiryPreview.textContent =
+                        value || "AA/YY";
+                }
+            };
+
+            const updateCvv = () => {
+                if (!cvvInput) {
+                    return;
+                }
+
+                const value = cvvInput.value
+                    .replace(/\D/g, "")
+                    .slice(0, 4);
+
+                cvvInput.value = value;
+
+                if (cardCvvPreview) {
+                    cardCvvPreview.textContent =
+                        value || "•••";
+                }
+            };
+
+            cardHolderInput?.addEventListener("focus", showCardFront);
+            cardNumberInput?.addEventListener("focus", showCardFront);
+            expiryInput?.addEventListener("focus", showCardFront);
+
+            cvvInput?.addEventListener("focus", showCardBack);
+            cvvInput?.addEventListener("blur", showCardFront);
+
+            cardHolderInput?.addEventListener(
+                "input",
+                updateCardHolder
+            );
+
+            cardNumberInput?.addEventListener(
+                "input",
+                updateCardNumber
+            );
+
+            expiryInput?.addEventListener(
+                "input",
+                updateExpiry
+            );
+
+            cvvInput?.addEventListener(
+                "input",
+                updateCvv
+            );
+
+            updateCardHolder();
+            updateCardNumber();
+            updateExpiry();
+            updateCvv();
+        });
+    </script>
+}

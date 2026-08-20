@@ -1,0 +1,400 @@
+@model deskly_ui.ViewModels.CartViewModel
+
+@{
+    ViewData["Title"] = "Sepetim";
+}
+
+<section class="min-h-screen overflow-x-hidden bg-[#F5F5F3] px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
+    <div class="mx-auto w-full max-w-7xl">
+
+        <nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-[#5E7387]"
+             aria-label="Sayfa yolu">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="transition hover:text-[#1E2430]">
+                Ana Sayfa
+            </a>
+
+            <span aria-hidden="true">/</span>
+
+            <span class="text-[#1E2430]">
+                Sepetim
+            </span>
+
+        </nav>
+
+        <div class="mt-8 flex flex-col gap-5 border-b border-[#AAB0B7]/25 pb-6 sm:flex-row sm:items-end sm:justify-between">
+
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    Deskly Sipariş
+                </p>
+
+                <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                    Sepetim
+                </h1>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3">
+
+                <span class="text-sm font-medium text-[#5E7387]">
+                    @Model.TotalQuantity ürün
+                </span>
+
+                @if (Model.Items.Any())
+                {
+                    <form asp-controller="Cart"
+                          asp-action="Clear"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="inline-flex items-center gap-2 rounded-full border border-[#D8DEE3] bg-white px-4 py-2.5 text-sm font-semibold text-[#5E7387] transition hover:border-red-200 hover:bg-red-50 hover:text-red-500">
+
+                            <svg class="h-4 w-4 shrink-0"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8"
+                                 aria-hidden="true">
+                                <path d="M4 7h16"></path>
+                                <path d="M9 7V4h6v3"></path>
+                                <path d="m6 7 1 13h10l1-13"></path>
+                                <path d="M10 11v5"></path>
+                                <path d="M14 11v5"></path>
+                            </svg>
+
+                            <span>Sepeti Temizle</span>
+
+                        </button>
+
+                    </form>
+                }
+
+            </div>
+
+        </div>
+
+        @if (!Model.Items.Any())
+        {
+            <div class="mt-10 rounded-[26px] border border-white/60 bg-white/60 px-5 py-14 text-center shadow-[0_18px_50px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:rounded-[30px] sm:px-6 sm:py-16">
+
+                <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#E7EDF1] text-[#3F5F7A]">
+
+                    <svg class="h-7 w-7"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         aria-hidden="true">
+                        <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L20 8H6"></path>
+                        <circle cx="10" cy="20" r="1"></circle>
+                        <circle cx="17" cy="20" r="1"></circle>
+                    </svg>
+
+                </div>
+
+                <h2 class="mt-6 text-2xl font-semibold text-[#1E2430]">
+                    Sepetiniz şu an boş
+                </h2>
+
+                <p class="mx-auto mt-3 max-w-md text-sm leading-7 text-[#5E7387]">
+                    Çalışma alanınıza uygun ürünleri keşfederek sepetinizi oluşturmaya başlayın.
+                </p>
+
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="mt-7 inline-flex rounded-full bg-[#1E2430] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                    Ürünleri Keşfet
+                </a>
+
+            </div>
+        }
+        else
+        {
+            <div class="mt-8 grid min-w-0 items-start gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
+
+                <div class="min-w-0 space-y-4">
+
+                    @foreach (var item in Model.Items)
+                    {
+                        var selectedVariant = item.Product.Variants
+                            .FirstOrDefault(variant =>
+                                variant.ColorName == item.SelectedColor);
+
+                        var displayImage = selectedVariant?.ImageUrl
+                            ?? item.Product.ImageUrl;
+
+                        <article class="min-w-0 overflow-hidden rounded-[24px] border border-white/60 bg-white/65 p-4 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:rounded-[28px] sm:p-5">
+
+                            <div class="grid min-w-0 grid-cols-[96px_minmax(0,1fr)] items-start gap-4 sm:grid-cols-[160px_minmax(0,1fr)] sm:gap-5">
+
+                                <a asp-controller="Products"
+                                   asp-action="Detail"
+                                   asp-route-id="@item.ProductId"
+                                   class="block self-start overflow-hidden rounded-[18px] bg-[#F5F5F3] sm:rounded-[22px]">
+
+                                    <img src="@displayImage"
+                                         alt="@item.Product.Name"
+                                         class="aspect-square h-auto w-full object-cover transition duration-300 hover:scale-[1.03]" />
+
+                                </a>
+
+                                <div class="flex min-w-0 flex-col">
+
+                                    <div class="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
+
+                                        <div class="min-w-0">
+
+                                            <p class="truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-[#5E7387] sm:text-xs sm:tracking-[0.18em]">
+                                                @item.Product.Category
+                                            </p>
+
+                                            <a asp-controller="Products"
+                                               asp-action="Detail"
+                                               asp-route-id="@item.ProductId"
+                                               class="mt-1.5 block text-base font-semibold leading-6 tracking-tight text-[#1E2430] transition hover:text-[#3F5F7A] sm:mt-2 sm:text-xl">
+                                                @item.Product.Name
+                                            </a>
+
+                                            @if (!string.IsNullOrWhiteSpace(item.SelectedColor))
+                                            {
+                                                <p class="mt-2 text-xs text-[#5E7387] sm:mt-3 sm:text-sm">
+                                                    Renk:
+                                                    <span class="font-semibold text-[#1E2430]">
+                                                        @item.SelectedColor
+                                                    </span>
+                                                </p>
+                                            }
+
+                                        </div>
+
+                                        <div class="shrink-0 text-left sm:text-right">
+
+                                            <p class="hidden text-sm text-[#5E7387] sm:block">
+                                                Birim fiyat
+                                            </p>
+
+                                            <p class="text-base font-semibold text-[#1E2430] sm:mt-1 sm:text-xl">
+                                                ₺@item.UnitPrice.ToString("N0")
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+                                    <p class="mt-3 hidden text-sm leading-6 text-[#5E7387] sm:block">
+                                        @item.Product.ShortDescription
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mt-4 flex flex-col gap-4 border-t border-[#AAB0B7]/25 pt-4 sm:ml-[180px] sm:mt-[-52px] sm:min-h-[52px] sm:flex-row sm:items-end sm:justify-between sm:border-t-0 sm:pt-0">
+
+                                <div class="inline-flex w-fit items-center rounded-full border border-[#D8DEE3] bg-white">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Decrease"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@item.ProductId" />
+
+                                        <input type="hidden"
+                                               name="selectedColor"
+                                               value="@item.SelectedColor" />
+
+                                        <button type="submit"
+                                                aria-label="Adedi azalt"
+                                                class="h-10 w-10 text-lg text-[#5E7387] transition hover:text-[#1E2430] sm:h-11 sm:w-11 sm:text-xl">
+                                            −
+                                        </button>
+
+                                    </form>
+
+                                    <span class="min-w-[36px] text-center text-sm font-semibold text-[#1E2430] sm:min-w-[42px]">
+                                        @item.Quantity
+                                    </span>
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Increase"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@item.ProductId" />
+
+                                        <input type="hidden"
+                                               name="selectedColor"
+                                               value="@item.SelectedColor" />
+
+                                        <button type="submit"
+                                                aria-label="Adedi artır"
+                                                class="h-10 w-10 text-lg text-[#5E7387] transition hover:text-[#1E2430] sm:h-11 sm:w-11 sm:text-xl">
+                                            +
+                                        </button>
+
+                                    </form>
+
+                                </div>
+
+                                <div class="flex items-end justify-between gap-4 sm:justify-end">
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Remove"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="productId"
+                                               value="@item.ProductId" />
+
+                                        <input type="hidden"
+                                               name="selectedColor"
+                                               value="@item.SelectedColor" />
+
+                                        <button type="submit"
+                                                class="inline-flex items-center gap-2 text-sm font-semibold text-[#7A8794] transition hover:text-red-500">
+
+                                            <svg class="h-4 w-4 shrink-0"
+                                                 viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor"
+                                                 stroke-width="1.8"
+                                                 aria-hidden="true">
+                                                <path d="M4 7h16"></path>
+                                                <path d="M9 7V4h6v3"></path>
+                                                <path d="m6 7 1 13h10l1-13"></path>
+                                            </svg>
+
+                                            Kaldır
+
+                                        </button>
+
+                                    </form>
+
+                                    <div class="text-right">
+
+                                        <p class="text-[10px] uppercase tracking-[0.14em] text-[#5E7387] sm:text-xs sm:tracking-[0.16em]">
+                                            Toplam
+                                        </p>
+
+                                        <p class="mt-1 text-lg font-semibold text-[#1E2430] sm:text-xl">
+                                            ₺@item.TotalPrice.ToString("N0")
+                                        </p>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+                    }
+
+                    <div class="pt-2">
+
+                        <a asp-controller="Products"
+                           asp-action="Index"
+                           class="inline-flex items-center gap-2 text-sm font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+
+                            <span>←</span>
+                            Alışverişe devam et
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <aside class="min-w-0 rounded-[24px] border border-white/60 bg-white/65 p-5 shadow-[0_18px_50px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:rounded-[28px] sm:p-6 lg:sticky lg:top-6">
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Sipariş Özeti
+                    </p>
+
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-[#1E2430]">
+                        Toplam
+                    </h2>
+
+                    <div class="mt-6 space-y-4 border-y border-[#AAB0B7]/25 py-5">
+
+                        <div class="flex items-center justify-between gap-5 text-sm">
+                            <span class="text-[#5E7387]">Ara toplam</span>
+
+                            <span class="font-semibold text-[#1E2430]">
+                                ₺@Model.Subtotal.ToString("N0")
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-5 text-sm">
+                            <span class="text-[#5E7387]">Kargo</span>
+
+                            <span class="font-semibold text-[#1E2430]">
+                                ₺@Model.Shipping.ToString("N0")
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-5 text-sm">
+                            <span class="text-[#5E7387]">İndirim</span>
+
+                            <span class="font-semibold text-[#1E2430]">
+                                -₺@Model.Discount.ToString("N0")
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-5 flex items-end justify-between gap-4">
+
+                        <div class="min-w-0">
+                            <p class="text-sm text-[#5E7387]">
+                                Genel toplam
+                            </p>
+
+                            <p class="mt-1 text-xs text-[#7A8794]">
+                                KDV dahildir
+                            </p>
+                        </div>
+
+                        <p class="shrink-0 text-2xl font-semibold tracking-tight text-[#1E2430] sm:text-3xl">
+                            ₺@Model.Total.ToString("N0")
+                        </p>
+
+                    </div>
+
+                   <a asp-controller="Cart"
+   asp-action="Checkout"
+   class="mt-7 flex w-full items-center justify-center rounded-full bg-[#1E2430] px-5 py-4 text-center text-base font-semibold text-white transition hover:bg-[#3F5F7A]">
+    Ödemeye Geç
+</a>
+
+                    <div class="mt-5 rounded-[20px] border border-[#AAB0B7]/25 bg-white/45 p-4">
+
+                        <p class="text-sm font-semibold text-[#1E2430]">
+                            Güvenli alışveriş
+                        </p>
+
+                        <p class="mt-2 text-xs leading-6 text-[#5E7387]">
+                            Ödeme bilgileriniz güvenli bağlantı üzerinden işlenir.
+                        </p>
+
+                    </div>
+
+                </aside>
+
+            </div>
+        }
+
+    </div>
+</section>

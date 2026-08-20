@@ -1,8 +1,606 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model deskly_ui.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Ana Sayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@await Html.PartialAsync("Partials/_HeroSlider")
+<!-- GLASS PROMISE AREA -->
+<section class="relative -mt-6 z-20 py-12 md:py-16">
+    <div class="mx-auto max-w-6xl px-6 lg:px-10">
+
+        <div class="relative overflow-hidden rounded-[36px] border border-white/70 bg-[linear-gradient(135deg,rgba(255,255,255,0.52),rgba(215,225,232,0.32),rgba(255,255,255,0.42))] px-6 py-12 shadow-[0_24px_70px_rgba(30,36,48,0.10)] backdrop-blur-2xl md:px-12 md:py-16">
+
+            <div class="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-[#94B0C5]/25 blur-3xl"></div>
+            <div class="pointer-events-none absolute right-0 bottom-0 h-72 w-72 rounded-full bg-white/55 blur-3xl"></div>
+
+            <div class="relative min-h-[230px]">
+
+                <div class="info-panel flex min-h-[230px] flex-col items-center justify-center text-center" data-info-panel="0">
+                    <div class="mb-7 text-6xl drop-shadow-sm md:text-7xl">🛵</div>
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.30em] text-[#3F5F7A] md:text-sm">
+                        Hızlı Teslimat
+                    </p>
+
+                   <h2 class="mt-4 text-3xl font-bold tracking-tight text-[#1E2430] md:text-5xl lg:text-6xl">
+    Masa düzenin beklemesin.
+</h2>
+
+                    <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#5E7387] md:text-lg">
+                        Seçili ürünlerde hızlı gönderim desteğiyle workspace kurulumunu kısa sürede tamamla.
+                    </p>
+                </div>
+
+                <div class="info-panel hidden min-h-[230px] flex-col items-center justify-center text-center" data-info-panel="1">
+                    <div class="mb-7 text-6xl drop-shadow-sm md:text-7xl">🔒</div>
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.30em] text-[#3F5F7A] md:text-sm">
+                        Güvenli Alışveriş
+                    </p>
+
+                  <h2 class="mt-4 text-3xl font-bold tracking-tight text-[#1E2430] md:text-5xl lg:text-6xl">
+    Sade ve güvenli ödeme.
+</h2>
+
+                    <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#5E7387] md:text-lg">
+                        Karmaşadan uzak, net ve premium hissettiren alışveriş deneyimi.
+                    </p>
+                </div>
+
+                <div class="info-panel hidden min-h-[230px] flex-col items-center justify-center text-center" data-info-panel="2">
+                    <div class="mb-7 text-6xl drop-shadow-sm md:text-7xl">✦</div>
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.30em] text-[#3F5F7A] md:text-sm">
+                        Seçilmiş Koleksiyon
+                    </p>
+
+                   <h2 class="mt-4 text-3xl font-bold tracking-tight text-[#1E2430] md:text-5xl lg:text-6xl">
+    Uyumlu masa ürünleri.
+</h2>
+
+                    <p class="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#5E7387] md:text-lg">
+                        Mouse, lamba, stand ve organizer ürünleri aynı modern workspace diliyle birleşir.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- =========================================================
+     KATEGORİLER
+     Dokunmatik cihazlarda yazılar sürekli görünür
+     Mouse / trackpad cihazlarda yazılar hover ile görünür
+     ========================================================= -->
+
+<section class="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+
+    <!-- BAŞLIK ALANI -->
+    <div class="mb-10 text-center">
+
+        <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/60 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5E7387]">
+            Kategoriler
+        </span>
+
+        <h2 class="mt-6 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+            Çalışma alanına göre keşfet
+        </h2>
+
+        <p class="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#5E7387]">
+            Deskly koleksiyonundaki ürün gruplarını inceleyerek kendi masa düzenine en uygun parçaları keşfet.
+        </p>
+
+    </div>
+
+
+    <!-- KATEGORİ GRID -->
+    <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+
+        <!-- =====================================================
+             MONİTÖR STANDLARI
+             ===================================================== -->
+
+        <a href="#"
+           class="group relative block overflow-hidden rounded-[30px]">
+
+            <!-- GÖRSEL -->
+            <div class="aspect-[4/5] overflow-hidden bg-[#D7E1E8]">
+
+                <img src="/images/categories/category-monitor-stands.png"
+                     alt="Deskly Monitör Standları"
+                     class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+
+            </div>
+
+            <!-- GRADIENT -->
+            <div class="category-card-overlay pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(30,36,48,0.82)_0%,rgba(30,36,48,0.30)_38%,transparent_68%)]">
+            </div>
+
+            <!-- YAZI -->
+            <div class="category-card-content absolute inset-x-0 bottom-0 p-6 text-white">
+
+                <h3 class="text-xl font-semibold">
+                    Monitör Standları
+                </h3>
+
+                <p class="mt-2 text-sm leading-6 text-white/80">
+                    Daha düzenli ve dengeli masa görünümü için yükseltici çözümler.
+                </p>
+
+            </div>
+
+        </a>
+
+
+        <!-- =====================================================
+             MASA LAMBALARI
+             ===================================================== -->
+
+        <a href="#"
+           class="group relative block overflow-hidden rounded-[30px]">
+
+            <!-- GÖRSEL -->
+            <div class="aspect-[4/5] overflow-hidden bg-[#C8D7E2]">
+
+                <img src="/images/categories/category-desk-lamps.png"
+                     alt="Deskly Masa Lambaları"
+                     class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+
+            </div>
+
+            <!-- GRADIENT -->
+            <div class="category-card-overlay pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(30,36,48,0.82)_0%,rgba(30,36,48,0.30)_38%,transparent_68%)]">
+            </div>
+
+            <!-- YAZI -->
+            <div class="category-card-content absolute inset-x-0 bottom-0 p-6 text-white">
+
+                <h3 class="text-xl font-semibold">
+                    Masa Lambaları
+                </h3>
+
+                <p class="mt-2 text-sm leading-6 text-white/80">
+                    Doğru ışıkla daha sakin ve verimli bir çalışma atmosferi.
+                </p>
+
+            </div>
+
+        </a>
+
+
+        <!-- =====================================================
+             ORGANIZER
+             ===================================================== -->
+
+        <a href="#"
+           class="group relative block overflow-hidden rounded-[30px]">
+
+            <!-- GÖRSEL -->
+            <div class="aspect-[4/5] overflow-hidden bg-[#F5F5F3]">
+
+                <img src="/images/categories/category-organizer.png"
+                     alt="Deskly Organizer"
+                     class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+
+            </div>
+
+            <!-- GRADIENT -->
+            <div class="category-card-overlay pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(30,36,48,0.82)_0%,rgba(30,36,48,0.30)_38%,transparent_68%)]">
+            </div>
+
+            <!-- YAZI -->
+            <div class="category-card-content absolute inset-x-0 bottom-0 p-6 text-white">
+
+                <h3 class="text-xl font-semibold">
+                    Organizer’lar
+                </h3>
+
+                <p class="mt-2 text-sm leading-6 text-white/80">
+                    Masa üstü akışını sadeleştiren günlük düzen çözümleri.
+                </p>
+
+            </div>
+
+        </a>
+
+
+        <!-- =====================================================
+             ŞARJ VE TEKNOLOJİ
+             ===================================================== -->
+
+        <a href="#"
+           class="group relative block overflow-hidden rounded-[30px]">
+
+            <!-- GÖRSEL -->
+            <div class="aspect-[4/5] overflow-hidden bg-[#AAB0B7]">
+
+                <img src="/images/categories/category-charging-tech.png"
+                     alt="Deskly Şarj ve Teknoloji"
+                     class="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.04]" />
+
+            </div>
+
+            <!-- GRADIENT -->
+            <div class="category-card-overlay pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(30,36,48,0.82)_0%,rgba(30,36,48,0.30)_38%,transparent_68%)]">
+            </div>
+
+            <!-- YAZI -->
+            <div class="category-card-content absolute inset-x-0 bottom-0 p-6 text-white">
+
+                <h3 class="text-xl font-semibold">
+                    Şarj ve Teknoloji
+                </h3>
+
+                <p class="mt-2 text-sm leading-6 text-white/80">
+                    Bağlantı, şarj ve masa üzeri teknoloji ürünleri bir arada.
+                </p>
+
+            </div>
+
+        </a>
+
+    </div>
+
+</section>
+
+<!-- ====================================================== -->
+<!-- ÖNE ÇIKAN ÜRÜNLER -->
+<!-- ====================================================== -->
+
+<section id="featured-products"
+         class="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+
+    <!-- BAŞLIK -->
+    <div class="mb-10 text-center">
+
+        <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/60 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5E7387]">
+            Editör Seçimi
+        </span>
+
+        <h2 class="mt-6 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+            Öne Çıkan Ürünler
+        </h2>
+
+        <p class="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#5E7387]">
+            Deskly koleksiyonundaki en dikkat çeken ürünleri keşfedin.
+        </p>
+
+        <a asp-controller="Products"
+           asp-action="Index"
+           class="mt-4 inline-flex text-sm font-semibold text-[#3F5F7A] transition hover:text-[#1E2430]">
+            Tümünü Gör
+        </a>
+
+    </div>
+
+
+    <!-- SLIDER -->
+    <div class="featured-carousel">
+
+        <div class="featured-carousel-viewport">
+
+            <div class="featured-carousel-track">
+
+                @foreach (var product in Model.FeaturedProducts)
+                {
+                    <div class="featured-carousel-slide">
+                        @await Html.PartialAsync(
+                            "Partials/_HomeProductCard",
+                            product
+                        )
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- SOL -->
+        <button type="button"
+                id="featuredPrev"
+                class="featured-carousel-arrow featured-carousel-arrow-left"
+                aria-label="Önceki ürünler">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"></path>
+            </svg>
+
+        </button>
+
+
+        <!-- SAĞ -->
+        <button type="button"
+                id="featuredNext"
+                class="featured-carousel-arrow featured-carousel-arrow-right"
+                aria-label="Sonraki ürünler">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8"
+                 stroke-linecap="round"
+                 stroke-linejoin="round">
+                <path d="m9 18 6-6-6-6"></path>
+            </svg>
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- BLOG -->
+<section class="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+    <div class="mb-10 text-center">
+        <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/60 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5E7387]">
+            İçerikler
+        </span>
+
+        <h2 class="mt-6 text-3xl font-semibold text-[#1E2430] sm:text-4xl">
+            Blog
+        </h2>
+
+        <p class="mx-auto mt-3 max-w-2xl text-base leading-8 text-[#5E7387]">
+            Çalışma alanı, verimlilik ve modern masa düzeni üzerine kısa içerikler.
+        </p>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-3">
+        @foreach (var post in Model.LatestBlogPosts)
+        {
+            @await Html.PartialAsync("Partials/_BlogCard", post)
+        }
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-20">
+    <div class="mx-auto max-w-7xl px-6 lg:px-10">
+        <div class="mx-auto max-w-4xl rounded-[32px] border border-white/50 bg-[linear-gradient(135deg,_rgba(245,245,243,0.92)_0%,_rgba(215,225,232,0.88)_52%,_rgba(200,215,226,0.78)_100%)] p-8 shadow-[0_20px_60px_rgba(30,36,48,0.08)] backdrop-blur transition duration-300 hover:border-[#AAB0B7]/40 hover:shadow-[0_24px_70px_rgba(30,36,48,0.12)] sm:p-10 lg:p-12">
+            <div class="mx-auto max-w-2xl text-center">
+                <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/60 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5E7387]">
+                    Newsletter
+                </span>
+
+                <h2 class="mt-6 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                    Güncel Kal
+                </h2>
+
+                <p class="mt-4 text-base leading-8 text-[#5E7387] sm:text-lg">
+                    Yeni ürünler, çalışma alanı önerileri ve içerikler için e-posta listemize katıl.
+                </p>
+            </div>
+
+            <div class="mx-auto mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row">
+                <input type="email"
+                       placeholder="E-posta adresiniz"
+                       class="w-full rounded-full border border-[#AAB0B7]/40 bg-white/80 px-5 py-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#7A8794] focus:border-[#3F5F7A] focus:bg-white" />
+
+                <button class="whitespace-nowrap rounded-full bg-[#3F5F7A] px-6 py-3 text-sm font-medium text-white transition hover:bg-[#2B313C]">
+                    Abone Ol
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+
+    <script src="~/js/hero-slider.js"
+            asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const viewport =
+                document.querySelector(".featured-carousel-viewport");
+
+            const track =
+                document.querySelector(".featured-carousel-track");
+
+            const slides =
+                Array.from(
+                    document.querySelectorAll(
+                        ".featured-carousel-slide"
+                    )
+                );
+
+            const prev =
+                document.getElementById("featuredPrev");
+
+            const next =
+                document.getElementById("featuredNext");
+
+
+            if (
+                !viewport ||
+                !track ||
+                slides.length === 0 ||
+                !prev ||
+                !next
+            ) {
+                return;
+            }
+
+
+            let currentIndex = 0;
+            let autoSlideTimer;
+
+
+           const getVisibleCount = () => {
+
+    if (window.innerWidth <= 640) {
+        return 1;
+    }
+
+    if (window.innerWidth <= 900) {
+        return 2;
+    }
+
+    if (window.innerWidth <= 1199) {
+        return 2;
+    }
+
+    return 3;
+};
+
+
+            const getGap = () => {
+
+                if (window.innerWidth <= 640) {
+                    return 16;
+                }
+
+                if (window.innerWidth <= 900) {
+                    return 20;
+                }
+
+                return 24;
+            };
+
+
+            const getMaxIndex = () => {
+
+                return Math.max(
+                    0,
+                    slides.length - getVisibleCount()
+                );
+
+            };
+
+
+            const updateSlider = () => {
+
+                const slideWidth =
+                    slides[0].getBoundingClientRect().width;
+
+                const distance =
+                    currentIndex *
+                    (slideWidth + getGap());
+
+                track.style.transform =
+                    `translateX(-${distance}px)`;
+
+
+                prev.disabled =
+                    currentIndex === 0;
+
+                next.disabled =
+                    currentIndex >= getMaxIndex();
+
+            };
+
+
+            const goNext = () => {
+
+                if (currentIndex >= getMaxIndex()) {
+                    currentIndex = 0;
+                }
+                else {
+                    currentIndex++;
+                }
+
+                updateSlider();
+
+            };
+
+
+            const goPrev = () => {
+
+                if (currentIndex <= 0) {
+                    currentIndex = getMaxIndex();
+                }
+                else {
+                    currentIndex--;
+                }
+
+                updateSlider();
+
+            };
+
+
+            const startAutoSlide = () => {
+
+                clearInterval(autoSlideTimer);
+
+                autoSlideTimer =
+                    setInterval(
+                        goNext,
+                        4000
+                    );
+
+            };
+
+
+            const stopAutoSlide = () => {
+
+                clearInterval(
+                    autoSlideTimer
+                );
+
+            };
+
+
+            next.addEventListener(
+                "click",
+                () => {
+                    goNext();
+                    startAutoSlide();
+                }
+            );
+
+
+            prev.addEventListener(
+                "click",
+                () => {
+                    goPrev();
+                    startAutoSlide();
+                }
+            );
+
+
+            viewport.addEventListener(
+                "mouseenter",
+                stopAutoSlide
+            );
+
+
+            viewport.addEventListener(
+                "mouseleave",
+                startAutoSlide
+            );
+
+
+            window.addEventListener(
+                "resize",
+                () => {
+
+                    currentIndex =
+                        Math.min(
+                            currentIndex,
+                            getMaxIndex()
+                        );
+
+                    updateSlider();
+
+                }
+            );
+
+
+            updateSlider();
+            startAutoSlide();
+
+        });
+    </script>
+
+}

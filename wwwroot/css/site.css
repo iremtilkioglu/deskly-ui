@@ -1,31 +1,582 @@
-html {
-  font-size: 14px;
+@import "tailwindcss";
+@keyframes infoBubbleIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-28px) scale(0.96);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+@keyframes iconPop {
+    0% {
+        opacity: 0;
+        transform: translateY(-18px) scale(0.88);
+        filter: blur(6px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+@keyframes infoDropIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-24px);
+        filter: blur(8px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+.glass-bubble-title {
+    background: linear-gradient(
+        140deg,
+        rgba(255,255,255,0.95) 0%,
+        rgba(220,230,240,0.75) 25%,
+        rgba(160,180,200,0.55) 60%,
+        rgba(120,140,160,0.45) 100%
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* üst highlight */
+    text-shadow:
+        0 -2px 3px rgba(14, 45, 80, 0.95),
+
+        /* iç parlama */
+        0 2px 4px rgba(255,255,255,0.85),
+
+        /* orta gölge */
+        0 6px 10px rgba(30,36,48,0.18),
+
+        /* derinlik */
+        0 14px 26px rgba(30,36,48,0.22),
+
+        /* alt glow */
+        0 20px 40px rgba(30,36,48,0.15);
+
+    filter: drop-shadow(0 10px 25px rgba(30,36,48,0.22));
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+/* =========================================================
+   DESKLY CONFIGURATOR
+   PRODUCT HOVER + ZOOM
+   ========================================================= */
+
+#configuratorCanvas {
+    isolation: isolate;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+/* Ürünlerin genel etkileşim ayarı */
+.configurator-product {
+    cursor: zoom-in;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-user-drag: none;
+
+    transform-origin: center center;
+
+    transition:
+        transform .30s ease,
+        filter .22s ease,
+        opacity .22s ease;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+/* Mouse ürünün üzerindeyken */
+.configurator-product:hover {
+    filter:
+        brightness(1.07)
+        drop-shadow(
+            0 7px 10px rgba(30, 36, 48, 0.14)
+        );
 }
 
-body {
-  margin-bottom: 60px;
+/* Tıklanan ürün */
+.configurator-product.is-zoomed {
+    z-index: 100 !important;
+
+    transform: scale(2.4);
+
+    cursor: zoom-out;
+
+    filter:
+        brightness(1.03)
+        drop-shadow(
+            0 18px 25px rgba(30, 36, 48, 0.18)
+        );
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Bir ürün incelenirken diğer ürünler */
+#configuratorCanvas.is-inspecting
+.configurator-product:not(.is-zoomed) {
+    opacity: 0.18;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Zoom sırasında masa biraz geride kalsın */
+#configuratorCanvas.is-inspecting #deskLayer {
+    opacity: 0.55;
+}
+
+/* Masa geçişi */
+#deskLayer {
+    transition:
+        opacity .28s ease;
+}
+
+
+/* =========================================================
+   MOBİL
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+    .configurator-product.is-zoomed {
+        transform: scale(1.8);
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .configurator-product,
+    #deskLayer {
+        transition: none;
+    }
+
+}
+
+/* =========================================================
+   FEATURED PRODUCTS CAROUSEL
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   CAROUSEL ANA ALANI
+   --------------------------------------------------------- */
+
+.featured-carousel {
+    position: relative;
+    width: 100%;
+    padding: 0 20px;
+}
+
+
+/* ---------------------------------------------------------
+   GÖRÜNÜR ALAN
+   --------------------------------------------------------- */
+
+.featured-carousel-viewport {
+    width: 100%;
+    overflow: hidden;
+}
+
+
+/* ---------------------------------------------------------
+   ÜRÜNLERİN BULUNDUĞU TRACK
+   --------------------------------------------------------- */
+
+.featured-carousel-track {
+    display: flex;
+    align-items: stretch;
+    gap: 28px;
+
+    transition:
+        transform .55s cubic-bezier(.22, .61, .36, 1);
+
+    will-change: transform;
+}
+
+
+/* ---------------------------------------------------------
+   MASAÜSTÜ
+   3 ÜRÜN GÖRÜNÜR
+   --------------------------------------------------------- */
+
+.featured-carousel-slide {
+    flex: 0 0 31%;
+    max-width: 360px;
+    min-width: 0;
+}
+
+
+/* ---------------------------------------------------------
+   SLIDE İÇİNDEKİ KART
+   --------------------------------------------------------- */
+
+.featured-carousel-slide > article {
+    width: 100%;
+}
+
+
+/* =========================================================
+   CAROUSEL OKLARI
+   ========================================================= */
+
+.featured-carousel-arrow {
+    position: absolute;
+    top: 42%;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    border: 1px solid rgba(170, 176, 183, .42);
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, .96);
+
+    color: #1E2430;
+
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    box-shadow:
+        0 8px 22px rgba(30, 36, 48, .08);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    transition:
+        transform .20s ease,
+        background-color .20s ease,
+        border-color .20s ease,
+        box-shadow .20s ease,
+        opacity .20s ease;
+}
+
+
+/* ---------------------------------------------------------
+   OK İKONU
+   --------------------------------------------------------- */
+
+.featured-carousel-arrow svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* ---------------------------------------------------------
+   OK HOVER
+   --------------------------------------------------------- */
+
+.featured-carousel-arrow:hover {
+    border-color: rgba(63, 95, 122, .45);
+
+    background: #ffffff;
+
+    transform:
+        translateY(-50%)
+        scale(1.05);
+
+    box-shadow:
+        0 10px 26px rgba(30, 36, 48, .12);
+}
+
+
+/* ---------------------------------------------------------
+   SOL OK
+   --------------------------------------------------------- */
+
+.featured-carousel-arrow-left {
+    left: -8px;
+}
+
+
+/* ---------------------------------------------------------
+   SAĞ OK
+   --------------------------------------------------------- */
+
+.featured-carousel-arrow-right {
+    right: -8px;
+}
+
+
+/* ---------------------------------------------------------
+   PASİF OK
+   --------------------------------------------------------- */
+
+.featured-carousel-arrow:disabled {
+    opacity: .28;
+    cursor: default;
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   LAPTOP
+   2 ÜRÜN
+   ========================================================= */
+
+@media (max-width: 1199px) {
+
+    .featured-carousel {
+        padding:
+            0
+            18px;
+    }
+
+    .featured-carousel-track {
+        gap: 24px;
+    }
+
+    .featured-carousel-slide {
+        flex:
+            0
+            0
+            calc((100% - 24px) / 2);
+
+        max-width: none;
+    }
+
+    .featured-carousel-arrow-left {
+        left: -6px;
+    }
+
+    .featured-carousel-arrow-right {
+        right: -6px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   2 ÜRÜN
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .featured-carousel {
+        padding:
+            0
+            14px;
+    }
+
+    .featured-carousel-track {
+        gap: 20px;
+    }
+
+    .featured-carousel-slide {
+        flex:
+            0
+            0
+            calc((100% - 20px) / 2);
+    }
+
+    .featured-carousel-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+    .featured-carousel-arrow-left {
+        left: -5px;
+    }
+
+    .featured-carousel-arrow-right {
+        right: -5px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBİL
+   1 ÜRÜN
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+    .featured-carousel {
+        padding:
+            0
+            8px;
+    }
+
+    .featured-carousel-track {
+        gap: 16px;
+    }
+
+    .featured-carousel-slide {
+        flex:
+            0
+            0
+            100%;
+
+        max-width: none;
+    }
+
+    .featured-carousel-arrow {
+        width: 38px;
+        height: 38px;
+    }
+
+    .featured-carousel-arrow svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .featured-carousel-arrow-left {
+        left: -4px;
+    }
+
+    .featured-carousel-arrow-right {
+        right: -4px;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .featured-carousel-track {
+        transition: none;
+    }
+
+}
+
+/* =========================================================
+   DESKLY - KATEGORİ KARTLARI
+   Desktop: hover ile içerik göster
+   Touch cihazlar: içerik sürekli görünür
+   ========================================================= */
+
+
+/* ---------------------------------------------------------
+   VARSAYILAN DURUM
+   Telefon / tablet / touch cihazlar için içerik görünür
+   --------------------------------------------------------- */
+
+.category-card-overlay {
+    opacity: 1;
+
+    transition:
+        opacity .45s ease;
+}
+
+.category-card-content {
+    opacity: 1;
+    transform: translateY(0);
+
+    transition:
+        opacity .45s ease,
+        transform .45s ease;
+}
+
+
+/* =========================================================
+   MOUSE / TRACKPAD DESTEKLEYEN CİHAZLAR
+   Sadece gerçek hover özelliği olan cihazlarda çalışır.
+   Böylece iPad Mini, iPad Air vb. ekran genişliğinden
+   bağımsız olarak touch davranışında kalır.
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+    /* Normal durumda gradient gizli */
+    .category-card-overlay {
+        opacity: 0;
+    }
+
+    /* Normal durumda yazılar aşağıda ve gizli */
+    .category-card-content {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+
+
+    /* Kart hover olduğunda gradient görünür */
+    .group:hover .category-card-overlay {
+        opacity: 1;
+    }
+
+
+    /* Kart hover olduğunda yazılar görünür */
+    .group:hover .category-card-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   TOUCH CİHAZLAR
+   Telefon + tablet + iPad vb.
+   Yazılar sürekli görünür.
+   ========================================================= */
+
+@media (hover: none), (pointer: coarse) {
+
+    .category-card-overlay {
+        opacity: 1;
+    }
+
+    .category-card-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   MOBİL
+   Küçük ekranlarda içerik biraz daha kompakt
+   ========================================================= */
+
+@media (max-width: 640px) {
+
+    .category-card-content {
+        padding: 22px;
+    }
+
+    .category-card-content h3 {
+        font-size: 18px;
+        line-height: 1.35;
+    }
+
+    .category-card-content p {
+        margin-top: 6px;
+        font-size: 13px;
+        line-height: 1.55;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   Hareket azaltma tercihi açık kullanıcılar
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .category-card-overlay,
+    .category-card-content {
+        transition: none;
+    }
 }

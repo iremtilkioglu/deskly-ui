@@ -1,0 +1,415 @@
+@model deskly_ui.Models.Product
+@inject deskly_ui.Services.WishlistService WishlistService
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<section class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-10 lg:py-12">
+
+    <div class="grid items-start gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+
+     <!-- Ürün görseli -->
+<div class="relative overflow-hidden rounded-[24px] bg-[#F5F5F3] sm:rounded-[28px] lg:rounded-[32px]">
+
+    <img id="productImage"
+         src="@Model.ImageUrl"
+         alt="@Model.Name"
+         class="aspect-square w-full object-cover transition-opacity duration-200 sm:aspect-[4/3] lg:aspect-[1/0.92]" />
+
+   @{
+    var isFavorite = WishlistService.Exists(Model.Id);
+}
+
+<form asp-controller="Wishlist"
+      asp-action="@(isFavorite ? "Remove" : "Add")"
+      method="post"
+      class="absolute right-5 top-5 z-20">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="productId"
+           value="@Model.Id" />
+
+    <button type="submit"
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition hover:scale-105">
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-6 w-6 text-[#1E2430]"
+             fill="@(isFavorite ? "currentColor" : "none")"
+             viewBox="0 0 24 24"
+             stroke="currentColor"
+             stroke-width="2">
+
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M21 8.25c0-2.485-2.239-4.5-5-4.5-1.74 0-3.272.84-4 2.126C11.272 4.59 9.74 3.75 8 3.75c-2.761 0-5 2.015-5 4.5 0 7.22 9 12 9 12s9-4.78 9-12Z" />
+
+        </svg>
+
+    </button>
+
+</form>
+
+</div>
+
+        <!-- Ürün bilgileri -->
+        <div class="lg:pt-3">
+
+            <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/70 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#4F5B66]">
+                Ürün Detayı
+            </span>
+
+            <h1 class="mt-5 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl lg:text-5xl">
+                @Model.Name
+            </h1>
+
+            <p class="mt-4 text-base leading-7 text-[#4F5B66] sm:text-lg sm:leading-8">
+                @Model.Description
+            </p>
+
+            <!-- Fiyat -->
+            <div class="mt-7 flex items-end gap-3">
+                @if (Model.OldPrice.HasValue)
+                {
+                    <span class="text-base text-[#7A8794] line-through">
+                        ₺@Model.OldPrice.Value.ToString("N0")
+                    </span>
+                }
+
+                <span class="text-3xl font-semibold text-[#1E2430]">
+                    ₺@Model.Price.ToString("N0")
+                </span>
+            </div>
+
+            <!-- Renk seçenekleri -->
+            @if (Model.Variants.Any())
+            {
+                <div class="mt-7">
+                    <p class="text-sm font-semibold text-[#1E2430]">
+                        Renk Seçimi:
+                        <span id="selectedColorName"
+                              class="font-medium text-[#5E7387]">
+                            @Model.Variants.First().ColorName
+                        </span>
+                    </p>
+
+                    <div class="mt-3 flex flex-wrap gap-4">
+                        @foreach (var variant in Model.Variants)
+                        {
+                            <button type="button"
+                                    title="@variant.ColorName"
+                                    aria-label="@variant.ColorName rengini seç"
+                                    aria-pressed="false"
+                                    data-variant-image="@variant.ImageUrl"
+                                    data-variant-name="@variant.ColorName"
+                                    class="variant-button relative h-10 w-10 rounded-full border-2 border-white shadow-sm ring-1 ring-[#AAB0B7]/50 transition duration-200 hover:scale-110"
+                                    style="background-color:@variant.ColorCode">
+                                <span class="variant-check pointer-events-none absolute inset-0 hidden items-center justify-center text-sm font-bold text-white drop-shadow">
+                                    ✓
+                                </span>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+
+         <!-- Adet ve sepete ekle -->
+<form asp-controller="Cart"
+      asp-action="Add"
+      method="post"
+      class="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="productId"
+           value="@Model.Id" />
+
+    <input type="hidden"
+           id="quantityInput"
+           name="quantity"
+           value="1" />
+
+    <input type="hidden"
+           id="selectedColorInput"
+           name="selectedColor"
+           value="@(Model.Variants.FirstOrDefault()?.ColorName ?? string.Empty)" />
+
+    <div class="inline-flex w-fit items-center rounded-full border border-[#D8DEE3] bg-white">
+
+        <button type="button"
+                id="decreaseQuantity"
+                aria-label="Adedi azalt"
+                class="h-12 w-12 text-xl text-[#5E7387] transition hover:text-[#1E2430]">
+            −
+        </button>
+
+        <span id="quantityValue"
+              class="min-w-[40px] text-center text-base font-semibold text-[#1E2430]">
+            1
+        </span>
+
+        <button type="button"
+                id="increaseQuantity"
+                aria-label="Adedi artır"
+                class="h-12 w-12 text-xl text-[#5E7387] transition hover:text-[#1E2430]">
+            +
+        </button>
+
+    </div>
+
+    <button type="submit"
+            class="flex-1 rounded-full bg-[#1E2430] px-8 py-4 text-base font-semibold text-white transition hover:bg-[#3F5F7A]">
+        Sepete Ekle
+    </button>
+
+</form>
+
+        </div>
+
+    </div>
+
+    <!-- Ürün bilgi paneli -->
+<div class="mt-8 w-full">
+    <div class="rounded-[28px] border border-white/50 bg-[linear-gradient(135deg,rgba(255,255,255,.24),rgba(215,225,232,.18),rgba(255,255,255,.20))] px-5 py-3 shadow-[0_14px_40px_rgba(30,36,48,.05)] backdrop-blur-2xl sm:px-7">
+
+        <div id="productInfoPanel"
+             class="grid gap-0 md:grid-cols-3">
+
+            <!-- Açıklama -->
+            <details class="product-detail-section scroll-mt-28 group border-b border-[#AAB0B7]/30 py-4 transition-all duration-300 open:bg-white/35 md:border-b-0 md:border-r md:px-5 md:first:pl-0">
+
+                <summary class="cursor-pointer list-none">
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Ürün Bilgisi
+                    </p>
+
+                    <div class="mt-3 border-t border-[#AAB0B7]/35 pt-3 transition-colors group-open:border-[#3F5F7A]">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-base font-medium text-[#1E2430] group-open:text-[#3F5F7A] group-open:font-semibold">
+                                Açıklama
+                            </h3>
+
+                            <span class="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/60 text-[#3F5F7A] transition-all group-open:bg-[#1E2430] group-open:text-white">
+                                <span class="group-open:hidden">+</span>
+                                <span class="hidden group-open:block">−</span>
+                            </span>
+                        </div>
+                    </div>
+                </summary>
+
+                <div class="pt-5 text-sm leading-7 text-[#5E7387]">
+                    @Model.Description
+                </div>
+
+            </details>
+
+            <!-- Özellikler -->
+            <details class="product-detail-section scroll-mt-28 group border-b border-[#AAB0B7]/30 py-4 transition-all duration-300 open:bg-white/35 md:border-b-0 md:border-r md:px-5">
+
+                <summary class="cursor-pointer list-none">
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Teknik Detay
+                    </p>
+
+                    <div class="mt-3 border-t border-[#AAB0B7]/35 pt-3 transition-colors group-open:border-[#3F5F7A]">
+
+                        <div class="flex items-center justify-between">
+
+                            <h3 class="text-base font-medium text-[#1E2430] group-open:text-[#3F5F7A] group-open:font-semibold">
+                                Özellikler
+                            </h3>
+
+                            <span class="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/60 text-[#3F5F7A] transition-all group-open:bg-[#1E2430] group-open:text-white">
+                                <span class="group-open:hidden">+</span>
+                                <span class="hidden group-open:block">−</span>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </summary>
+
+                <div class="space-y-3 pt-5 text-sm leading-7 text-[#5E7387]">
+                    <p>Minimal ve dayanıklı tasarım</p>
+                    <p>Modern çalışma alanlarına uyumlu</p>
+                    <p>Kolay temizlenebilir yüzey</p>
+                    <p>Günlük kullanım için uygun</p>
+                </div>
+
+            </details>
+
+            <!-- Teslimat -->
+            <details class="product-detail-section scroll-mt-28 group py-4 transition-all duration-300 open:bg-white/35 md:px-5 md:last:pr-0">
+
+                <summary class="cursor-pointer list-none">
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Sipariş Süreci
+                    </p>
+
+                    <div class="mt-3 border-t border-[#AAB0B7]/35 pt-3 transition-colors group-open:border-[#3F5F7A]">
+
+                        <div class="flex items-center justify-between">
+
+                            <h3 class="text-base font-medium text-[#1E2430] group-open:text-[#3F5F7A] group-open:font-semibold">
+                                Teslimat ve İade
+                            </h3>
+
+                            <span class="relative flex h-8 w-8 items-center justify-center rounded-full bg-white/60 text-[#3F5F7A] transition-all group-open:bg-[#1E2430] group-open:text-white">
+                                <span class="group-open:hidden">+</span>
+                                <span class="hidden group-open:block">−</span>
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </summary>
+
+                <div class="space-y-3 pt-5 text-sm leading-7 text-[#5E7387]">
+                    <p>Güvenli paketleme ile gönderim.</p>
+                    <p>Seçili siparişlerde ücretsiz kargo.</p>
+                    <p>14 gün içinde kolay iade desteği.</p>
+                </div>
+
+            </details>
+
+        </div>
+
+    </div>
+</div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const decreaseButton = document.getElementById("decreaseQuantity");
+            const increaseButton = document.getElementById("increaseQuantity");
+            const quantityValue = document.getElementById("quantityValue");
+            const quantityInput = document.getElementById("quantityInput");
+const selectedColorInput = document.getElementById("selectedColorInput");
+
+            const productImage = document.getElementById("productImage");
+            const selectedColorName = document.getElementById("selectedColorName");
+            const variantButtons = document.querySelectorAll(".variant-button");
+
+            const productInfoPanel = document.getElementById("productInfoPanel");
+            const detailSections = document.querySelectorAll(".product-detail-section");
+
+            let quantity = 1;
+
+            // Adet azalt
+           decreaseButton?.addEventListener("click", () => {
+    if (quantity > 1) {
+        quantity -= 1;
+
+        quantityValue.textContent = quantity;
+        quantityInput.value = quantity;
+    }
+});
+
+            // Adet artır
+            increaseButton?.addEventListener("click", () => {
+    quantity += 1;
+
+    quantityValue.textContent = quantity;
+    quantityInput.value = quantity;
+});
+
+            // Seçili renk görünümü
+            const setSelectedVariant = (selectedButton) => {
+                variantButtons.forEach((button) => {
+                    button.classList.remove(
+                        "ring-[3px]",
+                        "ring-[#1E2430]",
+                        "ring-offset-[3px]",
+                        "ring-offset-[#F5F5F3]",
+                        "scale-110"
+                    );
+
+                    button.setAttribute("aria-pressed", "false");
+
+                    const checkIcon = button.querySelector(".variant-check");
+
+                    checkIcon?.classList.add("hidden");
+                    checkIcon?.classList.remove("flex");
+                });
+
+                selectedButton.classList.add(
+                    "ring-[3px]",
+                    "ring-[#1E2430]",
+                    "ring-offset-[3px]",
+                    "ring-offset-[#F5F5F3]",
+                    "scale-110"
+                );
+
+                selectedButton.setAttribute("aria-pressed", "true");
+
+                const selectedCheckIcon =
+                    selectedButton.querySelector(".variant-check");
+
+                selectedCheckIcon?.classList.remove("hidden");
+                selectedCheckIcon?.classList.add("flex");
+
+                const newImage = selectedButton.dataset.variantImage;
+                const variantName = selectedButton.dataset.variantName;
+
+                if (productImage && newImage) {
+                    productImage.classList.add("opacity-70");
+
+                    window.setTimeout(() => {
+                        productImage.src = newImage;
+                        productImage.classList.remove("opacity-70");
+                    }, 120);
+                }
+
+                if (selectedColorName && variantName) {
+                    selectedColorName.textContent = variantName;
+                }
+                if (selectedColorInput && variantName) {
+    selectedColorInput.value = variantName;
+}
+            };
+
+            variantButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    setSelectedVariant(button);
+                });
+            });
+
+            // İlk varyant otomatik seçili
+            if (variantButtons.length > 0) {
+                setSelectedVariant(variantButtons[0]);
+            }
+
+            // Aynı anda yalnızca bir bilgi bölümü açık kalsın
+            detailSections.forEach((detail) => {
+    detail.addEventListener("toggle", () => {
+        if (!detail.open) {
+            return;
+        }
+
+        // Aynı anda sadece bir bölüm açık kalsın
+        detailSections.forEach((otherDetail) => {
+            if (otherDetail !== detail) {
+                otherDetail.open = false;
+            }
+        });
+
+        // Açılan bölümü masaüstü ve mobilde görünür alana getir
+        window.setTimeout(() => {
+            detail.scrollIntoView({
+                behavior: "smooth",
+                block: "center"
+            });
+        }, 150);
+    });
+});
+        });
+    </script>
+}

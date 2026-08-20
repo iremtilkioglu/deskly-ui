@@ -1,0 +1,575 @@
+@model List<deskly_ui.Models.Product>
+
+@{
+    ViewData["Title"] = "Ürünler";
+
+    var categories = new[]
+    {
+        "Tümü",
+        "Monitor Standı",
+        "Aydınlatma",
+        "Mouse",
+        "Mouse Pad",
+        "Organizer",
+        "Şarj",
+        "Laptop Standı",
+        "Aksesuar"
+    };
+}
+
+<section class="min-h-screen bg-[#F5F5F3] px-4 pb-24 pt-8 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-7xl">
+
+        <nav class="flex items-center gap-2 text-sm font-medium text-[#5E7387]"
+             aria-label="Sayfa yolu">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="transition hover:text-[#1E2430]">
+                Ana Sayfa
+            </a>
+
+            <span aria-hidden="true">/</span>
+
+            <span class="text-[#1E2430]">
+                Ürünler
+            </span>
+        </nav>
+
+        <div class="mt-8 rounded-[28px] border border-white/60 bg-[linear-gradient(135deg,rgba(255,255,255,0.42),rgba(215,225,232,0.22),rgba(255,255,255,0.30))] p-4 shadow-[0_16px_45px_rgba(30,36,48,0.06)] backdrop-blur-xl sm:p-6">
+
+            <!-- Mobil kategori seçimi -->
+            <div class="sm:hidden">
+                <label class="relative block">
+                    <span class="sr-only">Kategori seç</span>
+
+                    <select id="mobileCategoryFilter"
+                            class="h-12 w-full appearance-none rounded-full border border-[#AAB0B7]/40 bg-white/85 px-5 pr-12 text-sm font-semibold text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15">
+
+                        @foreach (var category in categories)
+                        {
+                            <option value="@category">
+                                @category
+                            </option>
+                        }
+
+                    </select>
+
+                    <svg class="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5E7387]"
+                         viewBox="0 0 20 20"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         aria-hidden="true">
+                        <path d="m6 8 4 4 4-4"></path>
+                    </svg>
+                </label>
+            </div>
+
+            <!-- Tablet ve masaüstü kategori butonları -->
+            <div id="categoryFilters"
+                 class="hidden gap-2 sm:flex sm:flex-wrap">
+
+                @foreach (var category in categories)
+                {
+                    var isAllCategory = category == "Tümü";
+
+                    <button type="button"
+                            data-category="@category"
+                            aria-pressed="@(isAllCategory ? "true" : "false")"
+                            class="category-filter rounded-full border px-5 py-2.5 text-sm font-semibold transition duration-200
+                                   @(isAllCategory
+                                       ? "border-[#1E2430] bg-[#1E2430] text-white"
+                                       : "border-[#AAB0B7]/40 bg-white/65 text-[#1E2430] hover:border-[#3F5F7A] hover:bg-[#3F5F7A] hover:text-white")">
+                        @category
+                    </button>
+                }
+
+            </div>
+
+            <div class="mt-5 grid gap-3 border-t border-[#AAB0B7]/25 pt-5 md:grid-cols-[minmax(0,1fr)_260px]">
+
+                <label class="relative block">
+                    <span class="sr-only">Ürün ara</span>
+
+                    <svg class="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-[#5E7387]"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="m20 20-3.5-3.5"></path>
+                    </svg>
+
+                    <input id="productSearch"
+                           type="search"
+                           placeholder="Ürün adı veya kategori ara..."
+                           autocomplete="off"
+                           class="h-12 w-full rounded-full border border-[#AAB0B7]/40 bg-white/80 pl-12 pr-5 text-sm font-medium text-[#1E2430] outline-none transition placeholder:text-[#7A8794] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                </label>
+
+                <label class="relative block">
+                    <span class="sr-only">Ürünleri sırala</span>
+
+                    <select id="productSort"
+                            class="h-12 w-full appearance-none rounded-full border border-[#AAB0B7]/40 bg-white/80 px-5 pr-12 text-sm font-semibold text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15">
+
+                        <option value="featured">Öne çıkanlar</option>
+                        <option value="new">Yeni gelenler</option>
+                        <option value="best-seller">Çok satanlar</option>
+                        <option value="price-asc">Fiyat: düşükten yükseğe</option>
+                        <option value="price-desc">Fiyat: yüksekten düşüğe</option>
+                        <option value="name-asc">İsim: A–Z</option>
+                    </select>
+
+                    <svg class="pointer-events-none absolute right-5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5E7387]"
+                         viewBox="0 0 20 20"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="1.8"
+                         aria-hidden="true">
+                        <path d="m6 8 4 4 4-4"></path>
+                    </svg>
+                </label>
+
+            </div>
+
+        </div>
+
+        <div class="mb-8 mt-10 flex items-end justify-between border-b border-[#AAB0B7]/25 pb-5">
+
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    Deskly Koleksiyonu
+                </p>
+
+                <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                    Ürünler
+                </h1>
+            </div>
+
+            <p id="productCount"
+               class="text-sm font-medium text-[#5E7387]"
+               aria-live="polite">
+                @Model.Count ürün
+            </p>
+
+        </div>
+
+        <div id="productGrid"
+             class="grid items-stretch gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+            @for (var index = 0; index < Model.Count; index++)
+            {
+                var product = Model[index];
+
+                <div class="product-grid-item min-w-0"
+                     data-original-index="@index"
+                     data-category="@product.Category"
+                     data-name="@($"{product.Name} {product.ShortDescription} {product.Category}")"
+                     data-product-name="@product.Name"
+                     data-price="@product.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                     data-is-new="@product.IsNew.ToString().ToLowerInvariant()"
+                     data-is-best-seller="@product.IsBestSeller.ToString().ToLowerInvariant()"
+                     data-is-featured="@product.IsFeatured.ToString().ToLowerInvariant()">
+
+                    <partial name="~/Views/Shared/Partials/_ProductCard.cshtml"
+                             model="product" />
+
+                </div>
+            }
+
+        </div>
+
+        <div id="emptyProductState"
+             class="hidden rounded-[28px] border border-[#AAB0B7]/25 bg-white/55 px-6 py-16 text-center">
+
+            <h3 class="text-xl font-semibold text-[#1E2430]">
+                Ürün bulunamadı
+            </h3>
+
+            <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                Arama ifadenizi veya kategoriyi değiştirerek tekrar deneyin.
+            </p>
+
+            <button type="button"
+                    id="clearProductFilters"
+                    class="mt-6 rounded-full bg-[#1E2430] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                Filtreleri Temizle
+            </button>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const productGrid = document.getElementById("productGrid");
+
+            const productItems = Array.from(
+                document.querySelectorAll(".product-grid-item")
+            );
+
+            const categoryButtons = Array.from(
+                document.querySelectorAll(".category-filter")
+            );
+
+            const mobileCategoryFilter =
+                document.getElementById("mobileCategoryFilter");
+
+            const searchInput = document.getElementById("productSearch");
+            const sortSelect = document.getElementById("productSort");
+            const productCount = document.getElementById("productCount");
+            const emptyState = document.getElementById("emptyProductState");
+            const clearFiltersButton =
+                document.getElementById("clearProductFilters");
+
+            let activeCategory = "Tümü";
+
+            const normalizeText = (value) => {
+                return (value ?? "")
+                    .toLocaleLowerCase("tr-TR")
+                    .trim();
+            };
+
+            const setActiveCategoryButton = (selectedButton) => {
+                categoryButtons.forEach((button) => {
+                    button.classList.remove(
+                        "border-[#1E2430]",
+                        "bg-[#1E2430]",
+                        "text-white"
+                    );
+
+                    button.classList.add(
+                        "border-[#AAB0B7]/40",
+                        "bg-white/65",
+                        "text-[#1E2430]"
+                    );
+
+                    button.setAttribute("aria-pressed", "false");
+                });
+
+                selectedButton.classList.remove(
+                    "border-[#AAB0B7]/40",
+                    "bg-white/65",
+                    "text-[#1E2430]"
+                );
+
+                selectedButton.classList.add(
+                    "border-[#1E2430]",
+                    "bg-[#1E2430]",
+                    "text-white"
+                );
+
+                selectedButton.setAttribute("aria-pressed", "true");
+            };
+
+            const sortProducts = (items) => {
+                const sortValue = sortSelect.value;
+
+                return [...items].sort((firstItem, secondItem) => {
+                    const firstPrice =
+                        Number.parseFloat(firstItem.dataset.price) || 0;
+
+                    const secondPrice =
+                        Number.parseFloat(secondItem.dataset.price) || 0;
+
+                    const firstIndex =
+                        Number.parseInt(
+                            firstItem.dataset.originalIndex,
+                            10
+                        ) || 0;
+
+                    const secondIndex =
+                        Number.parseInt(
+                            secondItem.dataset.originalIndex,
+                            10
+                        ) || 0;
+
+                    if (sortValue === "price-asc") {
+                        return firstPrice - secondPrice;
+                    }
+
+                    if (sortValue === "price-desc") {
+                        return secondPrice - firstPrice;
+                    }
+
+                    if (sortValue === "name-asc") {
+                        return firstItem.dataset.productName.localeCompare(
+                            secondItem.dataset.productName,
+                            "tr-TR"
+                        );
+                    }
+
+                    if (sortValue === "new") {
+                        return Number(
+                            secondItem.dataset.isNew === "true"
+                        ) - Number(
+                            firstItem.dataset.isNew === "true"
+                        ) || firstIndex - secondIndex;
+                    }
+
+                    if (sortValue === "best-seller") {
+                        return Number(
+                            secondItem.dataset.isBestSeller === "true"
+                        ) - Number(
+                            firstItem.dataset.isBestSeller === "true"
+                        ) || firstIndex - secondIndex;
+                    }
+
+                    return Number(
+                        secondItem.dataset.isFeatured === "true"
+                    ) - Number(
+                        firstItem.dataset.isFeatured === "true"
+                    ) || firstIndex - secondIndex;
+                });
+            };
+
+            const updateProducts = () => {
+                const searchValue = normalizeText(searchInput.value);
+
+                const visibleItems = productItems.filter((item) => {
+                    const matchesCategory =
+                        activeCategory === "Tümü"
+                        || item.dataset.category === activeCategory;
+
+                    const matchesSearch =
+                        searchValue.length === 0
+                        || normalizeText(
+                            item.dataset.name
+                        ).includes(searchValue);
+
+                    return matchesCategory && matchesSearch;
+                });
+
+                productItems.forEach((item) => {
+                    item.classList.add("hidden");
+                });
+
+                const sortedItems = sortProducts(visibleItems);
+
+                sortedItems.forEach((item) => {
+                    item.classList.remove("hidden");
+                    productGrid.appendChild(item);
+                });
+
+                const hasProducts = sortedItems.length > 0;
+
+                productGrid.classList.toggle("hidden", !hasProducts);
+                emptyState.classList.toggle("hidden", hasProducts);
+
+                productCount.textContent =
+                    `${sortedItems.length} ürün`;
+            };
+
+            categoryButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    activeCategory = button.dataset.category;
+
+                    if (mobileCategoryFilter) {
+                        mobileCategoryFilter.value = activeCategory;
+                    }
+
+                    setActiveCategoryButton(button);
+                    updateProducts();
+                });
+            });
+
+            mobileCategoryFilter?.addEventListener("change", () => {
+                activeCategory = mobileCategoryFilter.value;
+
+                const matchingButton = categoryButtons.find(
+                    (button) =>
+                        button.dataset.category === activeCategory
+                );
+
+                if (matchingButton) {
+                    setActiveCategoryButton(matchingButton);
+                }
+
+                updateProducts();
+            });
+
+            searchInput.addEventListener("input", updateProducts);
+            sortSelect.addEventListener("change", updateProducts);
+
+            clearFiltersButton.addEventListener("click", () => {
+                activeCategory = "Tümü";
+                searchInput.value = "";
+                sortSelect.value = "featured";
+
+                if (mobileCategoryFilter) {
+                    mobileCategoryFilter.value = "Tümü";
+                }
+
+                const allButton = categoryButtons.find(
+                    (button) =>
+                        button.dataset.category === "Tümü"
+                );
+
+                if (allButton) {
+                    setActiveCategoryButton(allButton);
+                }
+
+                updateProducts();
+            });
+
+            document.querySelectorAll(".product-card").forEach((card) => {
+                const cardImage =
+                    card.querySelector(".product-card-image");
+
+                const variantName =
+                    card.querySelector(".selected-variant-name");
+
+                    const selectedColorInput =
+    card.querySelector(".product-card-selected-color");
+
+                const variantButtons = Array.from(
+                    card.querySelectorAll(".product-card-variant")
+                );
+
+                const selectVariant = (selectedButton) => {
+                    variantButtons.forEach((button) => {
+                        button.classList.remove(
+                            "ring-[3px]",
+                            "ring-[#1E2430]",
+                            "ring-offset-2",
+                            "ring-offset-white",
+                            "scale-110"
+                        );
+
+                        button.setAttribute("aria-pressed", "false");
+
+                        const checkIcon =
+                            button.querySelector(
+                                ".product-card-variant-check"
+                            );
+
+                        checkIcon?.classList.add("hidden");
+                        checkIcon?.classList.remove("flex");
+                    });
+
+                    selectedButton.classList.add(
+                        "ring-[3px]",
+                        "ring-[#1E2430]",
+                        "ring-offset-2",
+                        "ring-offset-white",
+                        "scale-110"
+                    );
+
+                    selectedButton.setAttribute(
+                        "aria-pressed",
+                        "true"
+                    );
+
+                    const checkIcon =
+                        selectedButton.querySelector(
+                            ".product-card-variant-check"
+                        );
+
+                    checkIcon?.classList.remove("hidden");
+                    checkIcon?.classList.add("flex");
+
+                    const newImage =
+                        selectedButton.dataset.variantImage;
+
+                    const newVariantName =
+                        selectedButton.dataset.variantName;
+
+                    if (cardImage && newImage) {
+                        cardImage.classList.add("opacity-60");
+
+                        window.setTimeout(() => {
+                            cardImage.src = newImage;
+                            cardImage.classList.remove("opacity-60");
+                        }, 120);
+                    }
+
+                    if (variantName && newVariantName) {
+    variantName.textContent = newVariantName;
+}
+
+if (selectedColorInput && newVariantName) {
+    selectedColorInput.value = newVariantName;
+}
+                };
+
+                variantButtons.forEach((button) => {
+                    button.addEventListener("click", () => {
+                        selectVariant(button);
+                    });
+                });
+
+                if (variantButtons.length > 0) {
+                    selectVariant(variantButtons[0]);
+                }
+            });
+
+            updateProducts();
+            document.querySelectorAll(".wishlist-toggle-form").forEach((form) => {
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const button = form.querySelector("button");
+        const icon = form.querySelector(".wishlist-heart-icon");
+
+        if (!button || !icon) {
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                body: new FormData(form),
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Favori işlemi başarısız oldu.");
+            }
+
+            const result = await response.json();
+
+            form.dataset.isFavorite =
+                result.isFavorite.toString();
+
+            form.action = result.isFavorite
+                ? "/Wishlist/Remove"
+                : "/Wishlist/Add";
+
+            icon.setAttribute(
+                "fill",
+                result.isFavorite
+                    ? "currentColor"
+                    : "none"
+            );
+
+           const badges = document.querySelectorAll(
+    ".wishlist-count-badge"
+);
+
+badges.forEach((badge) => {
+    badge.textContent = result.count;
+
+    badge.classList.toggle(
+        "hidden",
+        result.count === 0
+    );
+});
+        } catch (error) {
+            console.error(error);
+        } finally {
+            button.disabled = false;
+        }
+    });
+});
+        });
+    </script>
+}

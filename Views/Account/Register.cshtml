@@ -1,0 +1,400 @@
+@model deskly_ui.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Hesap Oluştur";
+}
+
+<section class="min-h-[calc(100vh-82px)] bg-[#F5F5F3] px-4 py-8 sm:px-6 lg:px-10">
+    <div class="mx-auto grid w-full max-w-6xl overflow-hidden rounded-[32px] border border-white/60 bg-white/65 shadow-[0_24px_70px_rgba(30,36,48,0.10)] backdrop-blur-xl lg:grid-cols-[0.92fr_1.08fr]">
+
+        <!-- SOL TANITIM ALANI -->
+        <div class="relative hidden overflow-hidden bg-[#1E2430] p-10 text-white lg:flex lg:min-h-[760px] lg:flex-col lg:justify-between">
+
+            <div class="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/[0.04]"></div>
+            <div class="absolute -bottom-28 -left-24 h-80 w-80 rounded-full bg-white/[0.04]"></div>
+
+            <!-- LOGO -->
+            <div class="relative">
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="inline-flex items-center gap-3">
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 text-lg font-semibold">
+                        D
+                    </div>
+
+                    <div>
+                        <span class="block text-xl font-medium">
+                            Deskly
+                        </span>
+
+                        <span class="block text-sm text-white/55">
+                            Çalışma alanı ürünleri
+                        </span>
+                    </div>
+
+                </a>
+            </div>
+
+            <!-- TANITIM METNİ -->
+            <div class="relative max-w-md">
+
+                <p class="text-xs font-semibold uppercase tracking-[0.2em] text-white/45">
+                    Deskly topluluğuna katılın
+                </p>
+
+                <h1 class="mt-5 text-4xl font-semibold leading-tight tracking-tight">
+                    Çalışma alanınızı size özel bir deneyime dönüştürün.
+                </h1>
+
+                <p class="mt-5 text-base leading-8 text-white/60">
+                    Hesabınızı oluşturun; favorilerinizi saklayın, siparişlerinizi takip edin ve alışverişinize kaldığınız yerden devam edin.
+                </p>
+
+            </div>
+
+            <!-- ÖZELLİKLER -->
+            <div class="relative grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+
+                <div class="rounded-[20px] border border-white/10 bg-white/[0.05] p-4">
+                    <p class="text-sm font-semibold">
+                        Kişisel seçkiler
+                    </p>
+
+                    <p class="mt-2 text-xs leading-6 text-white/50">
+                        Favori ürünlerinizi hesabınızda saklayın.
+                    </p>
+                </div>
+
+                <div class="rounded-[20px] border border-white/10 bg-white/[0.05] p-4">
+                    <p class="text-sm font-semibold">
+                        Kolay alışveriş
+                    </p>
+
+                    <p class="mt-2 text-xs leading-6 text-white/50">
+                        Adres ve hesap bilgilerinizi yönetin.
+                    </p>
+                </div>
+
+                <div class="rounded-[20px] border border-white/10 bg-white/[0.05] p-4">
+                    <p class="text-sm font-semibold">
+                        Sipariş takibi
+                    </p>
+
+                    <p class="mt-2 text-xs leading-6 text-white/50">
+                        Sipariş durumunuzu tek yerden izleyin.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SAĞ FORM ALANI -->
+        <div class="flex min-h-[720px] items-center px-5 py-10 sm:px-10 lg:px-14">
+
+            <div class="mx-auto w-full max-w-md">
+
+                <!-- GERİ DÖN -->
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="inline-flex items-center gap-2 text-sm font-medium text-[#5E7387] transition hover:text-[#1E2430]">
+                    <span>←</span>
+                    Ana sayfaya dön
+                </a>
+
+                <!-- BAŞLIK -->
+                <div class="mt-7">
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Deskly Hesap
+                    </p>
+
+                    <h2 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                        Hesap Oluştur
+                    </h2>
+
+                    <p class="mt-3 text-sm leading-7 text-[#5E7387]">
+                        Kişisel alışveriş deneyiminizi oluşturmak için bilgilerinizi girin.
+                    </p>
+
+                </div>
+
+                <!-- KAYIT FORMU -->
+                <form asp-controller="Account"
+                      asp-action="Register"
+                      method="post"
+                      class="mt-7 space-y-5">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="rounded-[18px] border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600 empty:hidden">
+                    </div>
+
+                    <!-- AD VE SOYAD -->
+                    <div class="grid gap-4 sm:grid-cols-2">
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Ad
+                            </span>
+
+                            <input asp-for="FirstName"
+                                   type="text"
+                                   autocomplete="given-name"
+                                   placeholder="Adınız"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="FirstName"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Soyad
+                            </span>
+
+                            <input asp-for="LastName"
+                                   type="text"
+                                   autocomplete="family-name"
+                                   placeholder="Soyadınız"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <span asp-validation-for="LastName"
+                                  class="mt-2 block text-xs text-red-500">
+                            </span>
+                        </label>
+
+                    </div>
+
+                    <!-- E-POSTA -->
+                    <label class="block">
+                        <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                            E-posta
+                        </span>
+
+                        <input asp-for="Email"
+                               type="email"
+                               autocomplete="email"
+                               placeholder="ornek@email.com"
+                               class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                        <span asp-validation-for="Email"
+                              class="mt-2 block text-xs text-red-500">
+                        </span>
+                    </label>
+
+                    <!-- ŞİFRE -->
+                    <label class="block">
+                        <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                            Şifre
+                        </span>
+
+                        <div class="relative">
+
+                            <input asp-for="Password"
+                                   id="registerPassword"
+                                   type="password"
+                                   autocomplete="new-password"
+                                   placeholder="En az 6 karakter"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 pr-12 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <button type="button"
+                                    data-password-toggle="registerPassword"
+                                    aria-label="Şifreyi göster"
+                                    class="password-toggle absolute right-4 top-1/2 -translate-y-1/2 text-[#5E7387] transition hover:text-[#1E2430]">
+
+                                <svg class="password-show-icon h-5 w-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     aria-hidden="true">
+                                    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+                                    <circle cx="12" cy="12" r="2.5"></circle>
+                                </svg>
+
+                                <svg class="password-hide-icon hidden h-5 w-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     aria-hidden="true">
+                                    <path d="m3 3 18 18"></path>
+                                    <path d="M10.6 6.2A8.8 8.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.8 15.8 0 0 1-2.1 2.8"></path>
+                                    <path d="M6.4 6.4C3.9 8 2.5 12 2.5 12s3.5 6 9.5 6a9.5 9.5 0 0 0 3.2-.5"></path>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="Password"
+                              class="mt-2 block text-xs text-red-500">
+                        </span>
+                    </label>
+
+                    <!-- ŞİFRE TEKRAR -->
+                    <label class="block">
+                        <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                            Şifre Tekrar
+                        </span>
+
+                        <div class="relative">
+
+                            <input asp-for="ConfirmPassword"
+                                   id="registerConfirmPassword"
+                                   type="password"
+                                   autocomplete="new-password"
+                                   placeholder="Şifrenizi tekrar girin"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 pr-12 text-sm text-[#1E2430] outline-none transition placeholder:text-[#8A949D] focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+
+                            <button type="button"
+                                    data-password-toggle="registerConfirmPassword"
+                                    aria-label="Şifreyi göster"
+                                    class="password-toggle absolute right-4 top-1/2 -translate-y-1/2 text-[#5E7387] transition hover:text-[#1E2430]">
+
+                                <svg class="password-show-icon h-5 w-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     aria-hidden="true">
+                                    <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path>
+                                    <circle cx="12" cy="12" r="2.5"></circle>
+                                </svg>
+
+                                <svg class="password-hide-icon hidden h-5 w-5"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="1.8"
+                                     aria-hidden="true">
+                                    <path d="m3 3 18 18"></path>
+                                    <path d="M10.6 6.2A8.8 8.8 0 0 1 12 6c6 0 9.5 6 9.5 6a15.8 15.8 0 0 1-2.1 2.8"></path>
+                                    <path d="M6.4 6.4C3.9 8 2.5 12 2.5 12s3.5 6 9.5 6a9.5 9.5 0 0 0 3.2-.5"></path>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                        <span asp-validation-for="ConfirmPassword"
+                              class="mt-2 block text-xs text-red-500">
+                        </span>
+                    </label>
+
+                    <!-- KOŞULLAR -->
+                    <label class="flex cursor-pointer items-start gap-3">
+
+                        <input type="checkbox"
+                               required
+                               class="mt-1 h-4 w-4 shrink-0 rounded border-[#AAB0B7]/40 accent-[#1E2430]" />
+
+                        <span class="text-xs leading-6 text-[#5E7387]">
+                            <a href="#"
+                               class="font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                                Kullanım Koşulları
+                            </a>
+
+                            ve
+
+                            <a href="#"
+                               class="font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                                Gizlilik Politikası
+                            </a>
+
+                            metinlerini okudum ve kabul ediyorum.
+                        </span>
+
+                    </label>
+
+                    <!-- KAYIT BUTONU -->
+                    <button type="submit"
+                            class="flex w-full items-center justify-center rounded-full bg-[#1E2430] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#3F5F7A]">
+                        Hesap Oluştur
+                    </button>
+
+                </form>
+
+                <!-- GİRİŞ BAĞLANTISI -->
+                <div class="mt-7 border-t border-[#AAB0B7]/25 pt-6 text-center">
+
+                    <p class="text-sm text-[#5E7387]">
+                        Zaten hesabınız var mı?
+
+                        <a asp-controller="Account"
+                           asp-action="Login"
+                           class="ml-1 font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                            Giriş Yap
+                        </a>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleButtons =
+                document.querySelectorAll(".password-toggle");
+
+            toggleButtons.forEach((toggleButton) => {
+                toggleButton.addEventListener("click", () => {
+                    const inputId =
+                        toggleButton.dataset.passwordToggle;
+
+                    const passwordInput =
+                        document.getElementById(inputId);
+
+                    if (!passwordInput) {
+                        return;
+                    }
+
+                    const showIcon =
+                        toggleButton.querySelector(
+                            ".password-show-icon"
+                        );
+
+                    const hideIcon =
+                        toggleButton.querySelector(
+                            ".password-hide-icon"
+                        );
+
+                    const isPassword =
+                        passwordInput.type === "password";
+
+                    passwordInput.type =
+                        isPassword ? "text" : "password";
+
+                    showIcon?.classList.toggle(
+                        "hidden",
+                        isPassword
+                    );
+
+                    hideIcon?.classList.toggle(
+                        "hidden",
+                        !isPassword
+                    );
+
+                    toggleButton.setAttribute(
+                        "aria-label",
+                        isPassword
+                            ? "Şifreyi gizle"
+                            : "Şifreyi göster"
+                    );
+                });
+            });
+        });
+    </script>
+}

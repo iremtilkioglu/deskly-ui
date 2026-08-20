@@ -1,0 +1,133 @@
+<section class="relative overflow-hidden">
+    <div class="relative isolate">
+        <!-- background -->
+        <div class="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,_rgba(170,176,183,0.55),_transparent_34%),linear-gradient(135deg,_#F5F5F3_0%,_#D7E1E8_42%,_#C8D7E2_72%,_#F5F5F3_100%)]"></div>
+
+        <!-- blur shapes -->
+        <div class="absolute -left-16 top-10 -z-10 h-72 w-72 rounded-full bg-[#AAB0B7]/35 blur-3xl"></div>
+        <div class="absolute right-0 top-1/3 -z-10 h-80 w-80 rounded-full bg-[#94B0C5]/30 blur-3xl"></div>
+
+        <div class="mx-auto grid max-w-7xl items-center gap-12 px-6 py-14 lg:min-h-[78vh] lg:grid-cols-2 lg:py-20">
+            <!-- left -->
+            <div class="relative z-10">
+                <span class="inline-flex rounded-full border border-[#AAB0B7]/40 bg-white/60 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-[#5E7387]">
+                    Yeni Sezon
+                </span>
+
+                <div class="mt-6">
+                    <div class="hero-slide-content" data-slide-text="0">
+                        <h1 class="max-w-xl text-5xl font-semibold leading-tight tracking-tight text-[#1E2430] md:text-6xl">
+                            Kontrol sizde, akış sizinle ilerlesin.
+                        </h1>
+                        <p class="mt-5 max-w-lg text-base leading-8 text-[#5E7387] md:text-lg">
+                            Günlük çalışma düzeninizi sadeleştiren, akıcı ve işlevsel masa ürünleriyle daha konforlu bir deneyim oluşturun.
+                        </p>
+                    </div>
+
+                    <div class="hero-slide-content hidden" data-slide-text="1">
+                        <h1 class="max-w-xl text-5xl font-semibold leading-tight tracking-tight text-[#1E2430] md:text-6xl">
+                            Doğru ışık, daha sakin ve verimli bir masa.
+                        </h1>
+                        <p class="mt-5 max-w-lg text-base leading-8 text-[#5E7387] md:text-lg">
+                            Modern aydınlatma çözümleriyle çalışma alanınızda denge, konfor ve estetik bir atmosfer oluşturun.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a asp-controller="Products" asp-action="Index"
+                       class="inline-flex items-center rounded-full bg-[#3F5F7A] px-6 py-3 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-[#2B313C]">
+                        Ürünleri İncele
+                    </a>
+
+                    <a href="#featured-products"
+                       class="inline-flex items-center rounded-full border border-[#94B0C5] bg-white/70 px-6 py-3 text-sm font-medium text-[#1E2430] transition hover:-translate-y-0.5 hover:border-[#3F5F7A] hover:bg-white">
+                        Öne Çıkanları Gör
+                    </a>
+                </div>
+
+                <div class="mt-10 flex items-center gap-3">
+                    <button type="button"
+                            class="hero-dot h-2.5 w-8 rounded-full bg-[#3F5F7A] transition-all"
+                            data-slide="0"
+                            aria-label="1. slide"></button>
+
+                    <button type="button"
+                            class="hero-dot h-2.5 w-2.5 rounded-full bg-[#AAB0B7] transition-all"
+                            data-slide="1"
+                            aria-label="2. slide"></button>
+                </div>
+            </div>
+
+            <!-- right -->
+            <div class="relative">
+                <div class="relative overflow-hidden rounded-[36px] border border-white/40 bg-white/30 p-4 shadow-[0_20px_60px_rgba(30,36,48,0.10)] backdrop-blur">
+                    <div class="relative aspect-[4/3] overflow-hidden rounded-[28px] border border-white/40 bg-[linear-gradient(145deg,_rgba(245,245,243,0.88)_0%,_rgba(200,215,226,0.72)_52%,_rgba(170,176,183,0.50)_100%)]">
+
+                        <!-- slide 1 mouse -->
+                        <div class="hero-slide-image absolute inset-0 flex items-center justify-center" data-slide-image="0">
+                            <div class="pointer-events-none absolute left-10 top-10 h-28 w-28 rounded-full bg-white/35 blur-2xl"></div>
+                            <div class="pointer-events-none absolute bottom-10 right-12 h-32 w-32 rounded-full bg-[#94B0C5]/25 blur-3xl"></div>
+
+                            <div id="hero-mouse-scene" class="relative flex h-full w-full items-center justify-center">
+                                <div class="absolute h-44 w-44 rounded-full bg-[#AAB0B7]/20 blur-3xl"></div>
+
+                                <div id="hero-mouse-object" class="relative transition-transform duration-300 ease-out">
+                                    <div class="relative h-[280px] w-[190px] rounded-[90px] border border-white/60 bg-[linear-gradient(180deg,_rgba(255,255,255,0.95)_0%,_rgba(215,225,232,0.95)_58%,_rgba(170,176,183,0.78)_100%)] shadow-[0_18px_40px_rgba(30,36,48,0.12)]">
+                                        <div class="absolute left-1/2 top-7 h-12 w-[1px] -translate-x-1/2 bg-[#5E7387]/40"></div>
+                                        <div class="absolute left-1/2 top-12 h-8 w-8 -translate-x-1/2 rounded-full border border-[#94B0C5]/35 bg-white/40"></div>
+                                        <div class="absolute inset-x-0 bottom-10 mx-auto h-20 w-[120px] rounded-[40px] bg-white/20 blur-xl"></div>
+                                    </div>
+                                    <div class="absolute -bottom-5 left-1/2 h-8 w-28 -translate-x-1/2 rounded-full bg-[#2B313C]/10 blur-xl"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- slide 2 lamp -->
+                        <div class="hero-slide-image absolute inset-0 hidden items-center justify-center" data-slide-image="1">
+    <div class="pointer-events-none absolute left-12 top-12 h-28 w-28 rounded-full bg-white/25 blur-2xl"></div>
+    <div class="pointer-events-none absolute bottom-10 right-10 h-36 w-36 rounded-full bg-[#94B0C5]/20 blur-3xl"></div>
+
+    <div class="relative flex h-full w-full items-center justify-center">
+        <!-- güçlü glow -->
+        <div id="hero-lamp-glow"
+             class="absolute top-[22%] h-56 w-56 rounded-full bg-[#94B0C5]/40 blur-3xl opacity-100 transition-all duration-700">
+        </div>
+
+        <!-- ışık konisi -->
+        <div id="hero-lamp-light-cone"
+             class="absolute top-[34%] h-52 w-64 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.50),rgba(255,255,255,0.06),transparent)] opacity-100 blur-md [clip-path:polygon(50%_0%,0%_100%,100%_100%)] transition-all duration-700">
+        </div>
+
+        <div id="hero-lamp-object" class="relative transition-transform duration-500 ease-out">
+            <div class="relative h-[320px] w-[240px]">
+                <!-- üst başlık -->
+                <div class="absolute left-1/2 top-14 h-16 w-40 -translate-x-1/2 rounded-t-full rounded-b-[30px] bg-[linear-gradient(180deg,_#3F5F7A_0%,_#2B313C_100%)] shadow-[0_10px_25px_rgba(30,36,48,0.16)]"></div>
+
+                <!-- boyun -->
+                <div class="absolute left-1/2 top-4 h-16 w-4 -translate-x-1/2 rounded-full bg-[#3F5F7A]"></div>
+
+                <!-- iç ışık noktası -->
+                <div id="hero-lamp-bulb"
+                     class="absolute left-1/2 top-[102px] h-10 w-10 -translate-x-1/2 rounded-full bg-white/90 blur-[2px] transition-all duration-700">
+                </div>
+
+                <!-- alt ayak -->
+                <div class="absolute bottom-20 left-1/2 h-24 w-3 -translate-x-1/2 rounded-full bg-[#3F5F7A]"></div>
+                <div class="absolute bottom-12 left-1/2 h-5 w-28 -translate-x-1/2 rounded-full bg-[#AAB0B7]"></div>
+
+                <!-- gölge -->
+                <div id="hero-lamp-shadow"
+                     class="absolute bottom-6 left-1/2 h-10 w-36 -translate-x-1/2 rounded-full bg-[#2B313C]/15 blur-xl transition-all duration-700">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

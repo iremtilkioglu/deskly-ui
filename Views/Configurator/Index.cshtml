@@ -1,0 +1,1080 @@
+@{
+    ViewData["Title"] = "Masanı Tasarla";
+}
+
+<style>
+    /* =========================================================
+       CONFIGURATOR INTERACTION
+       ========================================================= */
+
+    #configuratorCanvas {
+        isolation: isolate;
+    }
+
+    .configurator-product {
+        cursor: zoom-in;
+        user-select: none;
+        -webkit-user-drag: none;
+
+        transition:
+            filter .22s ease,
+            opacity .22s ease,
+            transform .28s ease;
+    }
+
+    .configurator-product:hover {
+        filter:
+            brightness(1.07)
+            drop-shadow(0 7px 10px rgba(30, 36, 48, 0.14));
+    }
+
+    .configurator-product.is-zoomed {
+        z-index: 100 !important;
+        transform: scale(2.4);
+        cursor: zoom-out;
+
+        filter:
+            brightness(1.03)
+            drop-shadow(0 18px 25px rgba(30, 36, 48, 0.18));
+    }
+
+    #configuratorCanvas.is-inspecting .configurator-product:not(.is-zoomed) {
+        opacity: 0.20;
+    }
+
+    #configuratorCanvas.is-inspecting #deskLayer {
+        opacity: 0.55;
+    }
+</style>
+
+
+<section class="min-h-[calc(100vh-82px)] bg-[#F5F5F3] px-4 py-8 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-7xl">
+
+        <div class="grid items-start gap-8 lg:grid-cols-[360px_minmax(0,1fr)]">
+
+            <!-- ====================================================== -->
+            <!-- SOL KONTROL ALANI -->
+            <!-- ====================================================== -->
+            <aside class="rounded-[28px] border border-white/60 bg-white/70 p-6 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl lg:sticky lg:top-[106px] lg:max-h-[calc(100vh-130px)] lg:overflow-y-auto">
+
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    Deskly Configurator
+                </p>
+
+                <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430]">
+                    Masanı Tasarla
+                </h1>
+
+                <p class="mt-3 text-sm leading-7 text-[#5E7387]">
+                    Masa rengini seçin ve çalışma alanınıza ürün ekleyin.
+                </p>
+
+
+                <!-- ================================================== -->
+                <!-- MASA RENGİ -->
+                <!-- ================================================== -->
+                <div class="mt-8">
+
+                    <h2 class="text-sm font-semibold text-[#1E2430]">
+                        Masa rengi
+                    </h2>
+
+                    <div class="mt-4 grid grid-cols-2 gap-3">
+
+                        <button type="button"
+                                data-desk-image="/images/configurator/desk-white.png"
+                                class="desk-option rounded-[18px] border-2 border-[#1E2430] bg-white px-3 py-4 text-sm font-semibold text-[#1E2430] transition">
+                            Beyaz
+                        </button>
+
+                        <button type="button"
+                                data-desk-image="/images/configurator/desk-black.png"
+                                class="desk-option rounded-[18px] border border-[#AAB0B7]/35 bg-white px-3 py-4 text-sm font-medium text-[#5E7387] transition hover:border-[#3F5F7A]">
+                            Siyah
+                        </button>
+
+                        <button type="button"
+                                data-desk-image="/images/configurator/desk-oak.png"
+                                class="desk-option rounded-[18px] border border-[#AAB0B7]/35 bg-white px-3 py-4 text-sm font-medium text-[#5E7387] transition hover:border-[#3F5F7A]">
+                            Meşe
+                        </button>
+
+                        <button type="button"
+                                data-desk-image="/images/configurator/desk-walnut.png"
+                                class="desk-option rounded-[18px] border border-[#AAB0B7]/35 bg-white px-3 py-4 text-sm font-medium text-[#5E7387] transition hover:border-[#3F5F7A]">
+                            Ceviz
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================================== -->
+                <!-- MASA ÜSTÜ ÜRÜNLERİ -->
+                <!-- ================================================== -->
+                <div class="mt-8 border-t border-[#AAB0B7]/25 pt-7">
+
+                    <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                        Masa Üstü Ürünleri
+                    </p>
+
+                    <div class="mt-5 space-y-3">
+
+
+                        <!-- ================================================== -->
+                        <!-- MOUSE PAD -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Mouse Pad
+                                    </h3>
+
+                                    <p id="mousepadColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="mousepadToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="mousepadLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="mousepadColorName"
+                                        data-image="/images/configurator/mousepad-black.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#303236] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Gri"
+                                        data-layer="mousepadLayer"
+                                        data-color-name="Gri"
+                                        data-color-label="mousepadColorName"
+                                        data-image="/images/configurator/mousepad-gray.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#A7A9AC] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Bej"
+                                        data-layer="mousepadLayer"
+                                        data-color-name="Bej"
+                                        data-color-label="mousepadColorName"
+                                        data-image="/images/configurator/mousepad-beige.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#D8C6A4] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- FLOW WIRELESS MOUSE -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Flow Wireless Mouse
+                                    </h3>
+
+                                    <p id="mouseColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="mouseToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="mouseLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="mouseColorName"
+                                        data-image="/images/configurator/flow-wireless-mouse-black.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#24262A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Beyaz"
+                                        data-layer="mouseLayer"
+                                        data-color-name="Beyaz"
+                                        data-color-label="mouseColorName"
+                                        data-image="/images/configurator/flow-wireless-mouse-white.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#F3F1EB] shadow-sm ring-1 ring-[#AAB0B7]/50">
+                                </button>
+
+                                <button type="button"
+                                        title="Gri"
+                                        data-layer="mouseLayer"
+                                        data-color-name="Gri"
+                                        data-color-label="mouseColorName"
+                                        data-image="/images/configurator/flow-wireless-mouse-gray.png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#8C9196] shadow-sm ring-1 ring-[#AAB0B7]/50">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- LIFT LAPTOP STAND -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Lift Laptop Stand
+                                    </h3>
+
+                                    <p id="laptopColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Gümüş
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="laptopStandToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Gümüş"
+                                        data-layer="laptopStandLayer"
+                                        data-color-name="Gümüş"
+                                        data-color-label="laptopColorName"
+                                        data-image="/images/configurator/Lift-Laptop-Stand-(Silver).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#C9CBCD] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="laptopStandLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="laptopColorName"
+                                        data-image="/images/configurator/Lift-Laptop-Stand-(Black).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#25272A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Antrasit"
+                                        data-layer="laptopStandLayer"
+                                        data-color-name="Antrasit"
+                                        data-color-label="laptopColorName"
+                                        data-image="/images/configurator/Lift-Laptop-Stand-(Graphite).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#63676B] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- DESKLY ORGANIZER -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Deskly Organizer
+                                    </h3>
+
+                                    <p id="organizerColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="organizerToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="organizerLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="organizerColorName"
+                                        data-image="/images/configurator/Deskly-Organizer-(Black).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#25272A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Bej"
+                                        data-layer="organizerLayer"
+                                        data-color-name="Bej"
+                                        data-color-label="organizerColorName"
+                                        data-image="/images/configurator/Deskly-Organizer-(Beige).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#D4BE9A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Ceviz"
+                                        data-layer="organizerLayer"
+                                        data-color-name="Ceviz"
+                                        data-color-label="organizerColorName"
+                                        data-image="/images/configurator/Deskly-Organizer-(Walnut).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#855038] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- HEADPHONE STAND -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Headphone Stand
+                                    </h3>
+
+                                    <p id="headphoneColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="headphoneStandToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="headphoneStandLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="headphoneColorName"
+                                        data-image="/images/configurator/Headphone-Stand-(Black).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#25272A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Beyaz"
+                                        data-layer="headphoneStandLayer"
+                                        data-color-name="Beyaz"
+                                        data-color-label="headphoneColorName"
+                                        data-image="/images/configurator/Headphone-Stand-(White).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#F3F1EB] shadow-sm ring-1 ring-[#AAB0B7]/50">
+                                </button>
+
+                                <button type="button"
+                                        title="Ceviz"
+                                        data-layer="headphoneStandLayer"
+                                        data-color-name="Ceviz"
+                                        data-color-label="headphoneColorName"
+                                        data-image="/images/configurator/Headphone-Stand-(Walnut).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#855038] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- LUNA DESK LAMP -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        Luna Desk Lamp
+                                    </h3>
+
+                                    <p id="lampColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="lampToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="lampLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="lampColorName"
+                                        data-image="/images/configurator/Luna-Desk-Lamp-(Black).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#25272A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Beyaz"
+                                        data-layer="lampLayer"
+                                        data-color-name="Beyaz"
+                                        data-color-label="lampColorName"
+                                        data-image="/images/configurator/Luna-Desk-Lamp-(White).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#F3F1EB] shadow-sm ring-1 ring-[#AAB0B7]/50">
+                                </button>
+
+                                <button type="button"
+                                        title="Pirinç"
+                                        data-layer="lampLayer"
+                                        data-color-name="Pirinç"
+                                        data-color-label="lampColorName"
+                                        data-image="/images/configurator/Luna-Desk-Lamp-(Brass).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#B79861] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================== -->
+                        <!-- CHARGEPAD -->
+                        <!-- ================================================== -->
+                        <div class="rounded-[18px] border border-[#AAB0B7]/25 bg-white/60 px-4 py-3.5">
+
+                            <div class="flex items-center justify-between gap-4">
+
+                                <div>
+                                    <h3 class="text-sm font-semibold text-[#1E2430]">
+                                        ChargePad Wireless
+                                    </h3>
+
+                                    <p id="chargepadColorName"
+                                       class="mt-1 text-xs text-[#5E7387]">
+                                        Siyah
+                                    </p>
+                                </div>
+
+                                <label class="relative inline-flex cursor-pointer items-center">
+
+                                    <input id="chargepadToggle"
+                                           type="checkbox"
+                                           class="peer sr-only" />
+
+                                    <div class="h-7 w-12 rounded-full bg-[#D8DEE3] transition peer-checked:bg-[#1E2430]"></div>
+
+                                    <div class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:translate-x-5"></div>
+
+                                </label>
+
+                            </div>
+
+                            <div class="mt-3 flex items-center gap-2">
+
+                                <button type="button"
+                                        title="Siyah"
+                                        data-layer="chargepadLayer"
+                                        data-color-name="Siyah"
+                                        data-color-label="chargepadColorName"
+                                        data-image="/images/configurator/ChargePad-Wireless-(Black).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-[#1E2430] bg-[#25272A] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                                <button type="button"
+                                        title="Beyaz"
+                                        data-layer="chargepadLayer"
+                                        data-color-name="Beyaz"
+                                        data-color-label="chargepadColorName"
+                                        data-image="/images/configurator/ChargePad-Wireless-(White).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#F3F1EB] shadow-sm ring-1 ring-[#AAB0B7]/50">
+                                </button>
+
+                                <button type="button"
+                                        title="Gri"
+                                        data-layer="chargepadLayer"
+                                        data-color-name="Gri"
+                                        data-color-label="chargepadColorName"
+                                        data-image="/images/configurator/ChargePad-Wireless-(Gray).png"
+                                        class="product-color-option h-7 w-7 rounded-full border-2 border-white bg-[#777B80] shadow-sm ring-1 ring-[#AAB0B7]/40">
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+            <!-- ====================================================== -->
+            <!-- SAĞ ÖNİZLEME -->
+            <!-- ====================================================== -->
+            <section class="rounded-[32px] border border-white/60 bg-white/65 p-4 shadow-[0_24px_70px_rgba(30,36,48,0.10)] backdrop-blur-xl sm:p-6">
+
+                <div id="configuratorCanvas"
+                     class="relative aspect-[4/3] overflow-hidden rounded-[26px] bg-[#EAF0F4]">
+
+                    <!-- MASA -->
+                    <img id="deskLayer"
+                         src="/images/configurator/desk-white.png"
+                         alt="Masa"
+                         class="pointer-events-none absolute inset-0 z-10 h-full w-full object-contain transition-opacity duration-200" />
+
+
+                    <!-- MOUSE PAD -->
+                    <img id="mousepadLayer"
+                         src="/images/configurator/mousepad-black.png"
+                         alt="Mouse Pad"
+                         draggable="false"
+                         data-product-name="Mouse Pad"
+                         class="configurator-product absolute left-[28%] top-[15%] z-20 hidden w-[45%] object-contain" />
+
+
+                    <!-- HEADPHONE STAND -->
+                    <img id="headphoneStandLayer"
+                         src="/images/configurator/Headphone-Stand-(Black).png"
+                         alt="Headphone Stand"
+                         draggable="false"
+                         data-product-name="Headphone Stand"
+                         class="configurator-product absolute left-[11%] top-[19%] z-30 hidden w-[18%] object-contain" />
+
+
+                    <!-- ORGANIZER -->
+                    <img id="organizerLayer"
+                         src="/images/configurator/Deskly-Organizer-(Black).png"
+                         alt="Deskly Organizer"
+                         draggable="false"
+                         data-product-name="Deskly Organizer"
+                         class="configurator-product absolute left-[22%] top-[20%] z-40 hidden w-[17%] object-contain" />
+
+
+                    <!-- LAPTOP STAND -->
+                    <img id="laptopStandLayer"
+                         src="/images/configurator/Lift-Laptop-Stand-(Silver).png"
+                         alt="Lift Laptop Stand"
+                         draggable="false"
+                         data-product-name="Lift Laptop Stand"
+                         class="configurator-product absolute left-[32%] top-[18%] z-40 hidden w-[28%] object-contain" />
+
+
+                    <!-- MOUSE -->
+                    <img id="mouseLayer"
+                         src="/images/configurator/flow-wireless-mouse-black.png"
+                         alt="Flow Wireless Mouse"
+                         draggable="false"
+                         data-product-name="Flow Wireless Mouse"
+                         class="configurator-product absolute left-[52%] top-[32%] z-50 hidden w-[10%] object-contain" />
+
+
+                    <!-- LAMBA -->
+                    <img id="lampLayer"
+                         src="/images/configurator/Luna-Desk-Lamp-(Black).png"
+                         alt="Luna Desk Lamp"
+                         draggable="false"
+                         data-product-name="Luna Desk Lamp"
+                         class="configurator-product absolute left-[70%] top-[20%] z-40 hidden w-[20%] object-contain" />
+
+
+                    <!-- CHARGEPAD -->
+                    <img id="chargepadLayer"
+                         src="/images/configurator/ChargePad-Wireless-(Black).png"
+                         alt="ChargePad Wireless"
+                         draggable="false"
+                         data-product-name="ChargePad Wireless"
+                         class="configurator-product absolute left-[66%] top-[34%] z-50 hidden w-[12%] object-contain" />
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </div>
+</section>
+
+
+@section Scripts {
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // =============================================================
+        // KATMANLAR
+        // =============================================================
+
+        const deskLayer =
+            document.getElementById("deskLayer");
+
+        const mousepadLayer =
+            document.getElementById("mousepadLayer");
+
+        const mouseLayer =
+            document.getElementById("mouseLayer");
+
+        const laptopStandLayer =
+            document.getElementById("laptopStandLayer");
+
+        const organizerLayer =
+            document.getElementById("organizerLayer");
+
+        const headphoneStandLayer =
+            document.getElementById("headphoneStandLayer");
+
+        const lampLayer =
+            document.getElementById("lampLayer");
+
+        const chargepadLayer =
+            document.getElementById("chargepadLayer");
+
+        const configuratorCanvas =
+            document.getElementById("configuratorCanvas");
+
+
+        // =============================================================
+        // TOGGLE'LAR
+        // =============================================================
+
+        const mousepadToggle =
+            document.getElementById("mousepadToggle");
+
+        const mouseToggle =
+            document.getElementById("mouseToggle");
+
+        const laptopStandToggle =
+            document.getElementById("laptopStandToggle");
+
+        const organizerToggle =
+            document.getElementById("organizerToggle");
+
+        const headphoneStandToggle =
+            document.getElementById("headphoneStandToggle");
+
+        const lampToggle =
+            document.getElementById("lampToggle");
+
+        const chargepadToggle =
+            document.getElementById("chargepadToggle");
+
+
+        // =============================================================
+        // MASA RENKLERİ
+        // =============================================================
+
+        const deskOptions =
+            document.querySelectorAll(".desk-option");
+
+        deskOptions.forEach((button) => {
+
+            button.addEventListener("click", () => {
+
+                const imagePath =
+                    button.dataset.deskImage;
+
+                if (!deskLayer || !imagePath) {
+                    return;
+                }
+
+                deskLayer.src = imagePath;
+
+                deskOptions.forEach((option) => {
+
+                    option.classList.remove(
+                        "border-2",
+                        "border-[#1E2430]",
+                        "font-semibold",
+                        "text-[#1E2430]"
+                    );
+
+                    option.classList.add(
+                        "border",
+                        "border-[#AAB0B7]/35",
+                        "font-medium",
+                        "text-[#5E7387]"
+                    );
+
+                });
+
+                button.classList.remove(
+                    "border",
+                    "border-[#AAB0B7]/35",
+                    "font-medium",
+                    "text-[#5E7387]"
+                );
+
+                button.classList.add(
+                    "border-2",
+                    "border-[#1E2430]",
+                    "font-semibold",
+                    "text-[#1E2430]"
+                );
+
+            });
+
+        });
+
+
+        // =============================================================
+        // ÜRÜN AÇ / KAPAT
+        // =============================================================
+
+        const connectToggle = (toggle, layer) => {
+
+            if (!toggle || !layer) {
+                return;
+            }
+
+            toggle.addEventListener("change", () => {
+
+                layer.classList.toggle(
+                    "hidden",
+                    !toggle.checked
+                );
+
+            });
+
+        };
+
+
+        connectToggle(
+            mousepadToggle,
+            mousepadLayer
+        );
+
+        connectToggle(
+            mouseToggle,
+            mouseLayer
+        );
+
+        connectToggle(
+            laptopStandToggle,
+            laptopStandLayer
+        );
+
+        connectToggle(
+            organizerToggle,
+            organizerLayer
+        );
+
+        connectToggle(
+            headphoneStandToggle,
+            headphoneStandLayer
+        );
+
+        connectToggle(
+            lampToggle,
+            lampLayer
+        );
+
+        connectToggle(
+            chargepadToggle,
+            chargepadLayer
+        );
+
+
+        // =============================================================
+        // ÜRÜN RENK DEĞİŞTİRME
+        // =============================================================
+
+        const colorOptions =
+            document.querySelectorAll(".product-color-option");
+
+        colorOptions.forEach((button) => {
+
+            button.addEventListener("click", () => {
+
+                const layerId =
+                    button.dataset.layer;
+
+                const imagePath =
+                    button.dataset.image;
+
+                const colorName =
+                    button.dataset.colorName;
+
+                const colorLabelId =
+                    button.dataset.colorLabel;
+
+
+                if (!layerId || !imagePath) {
+                    return;
+                }
+
+
+                const layer =
+                    document.getElementById(layerId);
+
+                if (!layer) {
+                    return;
+                }
+
+
+                layer.src = imagePath;
+
+
+                if (colorLabelId) {
+
+                    const label =
+                        document.getElementById(colorLabelId);
+
+                    if (label) {
+                        label.textContent = colorName;
+                    }
+
+                }
+
+
+                document
+                    .querySelectorAll(
+                        `.product-color-option[data-layer="${layerId}"]`
+                    )
+                    .forEach((option) => {
+
+                        option.classList.remove(
+                            "border-[#1E2430]"
+                        );
+
+                        option.classList.add(
+                            "border-white"
+                        );
+
+                    });
+
+
+                button.classList.remove(
+                    "border-white"
+                );
+
+                button.classList.add(
+                    "border-[#1E2430]"
+                );
+
+
+                let relatedToggle = null;
+
+
+                switch (layerId) {
+
+                    case "mousepadLayer":
+                        relatedToggle = mousepadToggle;
+                        break;
+
+                    case "mouseLayer":
+                        relatedToggle = mouseToggle;
+                        break;
+
+                    case "laptopStandLayer":
+                        relatedToggle = laptopStandToggle;
+                        break;
+
+                    case "organizerLayer":
+                        relatedToggle = organizerToggle;
+                        break;
+
+                    case "headphoneStandLayer":
+                        relatedToggle = headphoneStandToggle;
+                        break;
+
+                    case "lampLayer":
+                        relatedToggle = lampToggle;
+                        break;
+
+                    case "chargepadLayer":
+                        relatedToggle = chargepadToggle;
+                        break;
+
+                }
+
+
+                if (
+                    relatedToggle &&
+                    !relatedToggle.checked
+                ) {
+
+                    relatedToggle.checked = true;
+
+                    layer.classList.remove(
+                        "hidden"
+                    );
+
+                }
+
+            });
+
+        });
+
+
+        // =============================================================
+        // GERÇEK ÜRÜN ZOOM
+        // =============================================================
+
+        const configuratorProducts =
+            document.querySelectorAll(".configurator-product");
+
+        let zoomedProduct = null;
+
+
+        const closeZoom = () => {
+
+            if (!zoomedProduct) {
+                return;
+            }
+
+            zoomedProduct.classList.remove(
+                "is-zoomed"
+            );
+
+            configuratorCanvas.classList.remove(
+                "is-inspecting"
+            );
+
+            zoomedProduct = null;
+
+        };
+
+
+        configuratorProducts.forEach((product) => {
+
+            // Görsel sürüklenmesini engelle
+            product.addEventListener("dragstart", (event) => {
+                event.preventDefault();
+            });
+
+
+            product.addEventListener("click", (event) => {
+
+                event.stopPropagation();
+
+
+                // Aynı ürüne tekrar tıklandıysa kapat
+                if (zoomedProduct === product) {
+
+                    closeZoom();
+
+                    return;
+                }
+
+
+                // Önceki zoom'u kapat
+                if (zoomedProduct) {
+
+                    zoomedProduct.classList.remove(
+                        "is-zoomed"
+                    );
+
+                }
+
+
+                product.classList.add(
+                    "is-zoomed"
+                );
+
+                configuratorCanvas.classList.add(
+                    "is-inspecting"
+                );
+
+                zoomedProduct = product;
+
+            });
+
+        });
+
+
+        // Boş alana tıklandığında zoom kapanır
+        configuratorCanvas.addEventListener(
+            "click",
+            () => {
+
+                closeZoom();
+
+            }
+        );
+
+    });
+</script>
+
+}

@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Sipariş Tamamlandı";
+    var orderNumber = ViewBag.OrderNumber as string;
+}
+
+<section class="min-h-screen bg-[#F5F5F3] px-4 py-10 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-4xl">
+
+        <div class="rounded-[32px] border border-white/60 bg-white/65 px-6 py-14 text-center shadow-[0_20px_60px_rgba(30,36,48,0.08)] backdrop-blur-xl sm:px-10 sm:py-16">
+
+            <div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#E7EDF1] text-[#1E2430]">
+                <svg class="h-9 w-9"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.8"
+                     aria-hidden="true">
+                    <path d="m5 12 4 4L19 6"></path>
+                </svg>
+            </div>
+
+            <p class="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#5E7387]">
+                Sipariş Başarılı
+            </p>
+
+            <h1 class="mt-3 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-5xl">
+                Siparişiniz alındı
+            </h1>
+
+            <p class="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#5E7387] sm:text-lg">
+                Siparişiniz başarıyla oluşturuldu. Bu ekran portfolyo demosudur; gerçek ödeme alınmamıştır.
+            </p>
+
+            <div class="mx-auto mt-8 max-w-md rounded-[22px] border border-[#AAB0B7]/25 bg-white/60 px-5 py-4">
+
+                <p class="text-sm text-[#5E7387]">
+                    Sipariş numarası
+                </p>
+
+                <p class="mt-2 text-lg font-semibold tracking-wide text-[#1E2430]">
+                    @orderNumber
+                </p>
+
+            </div>
+
+            <div class="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+
+                <a asp-controller="Products"
+                   asp-action="Index"
+                   class="inline-flex items-center justify-center rounded-full bg-[#1E2430] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                    Alışverişe Devam Et
+                </a>
+
+                <a asp-controller="Home"
+                   asp-action="Index"
+                   class="inline-flex items-center justify-center rounded-full border border-[#AAB0B7]/40 bg-white px-7 py-3.5 text-sm font-semibold text-[#1E2430] transition hover:border-[#3F5F7A]">
+                    Ana Sayfaya Dön
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

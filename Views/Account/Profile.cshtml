@@ -1,0 +1,635 @@
+@{
+    ViewData["Title"] = "Hesabım";
+}
+
+<section class="min-h-[calc(100vh-82px)] bg-[#F5F5F3] px-4 py-8 sm:px-6 lg:px-10">
+    <div class="mx-auto max-w-7xl">
+
+        <!-- SAYFA YOLU -->
+        <nav class="flex items-center gap-2 text-sm font-medium text-[#5E7387]"
+             aria-label="Sayfa yolu">
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="transition hover:text-[#1E2430]">
+                Ana Sayfa
+            </a>
+
+            <span aria-hidden="true">/</span>
+
+            <span class="text-[#1E2430]">
+                Hesabım
+            </span>
+
+        </nav>
+
+        <!-- SAYFA BAŞLIĞI -->
+        <div class="mt-8 border-b border-[#AAB0B7]/25 pb-6">
+
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                Deskly Hesap
+            </p>
+
+            <h1 class="mt-2 text-3xl font-semibold tracking-tight text-[#1E2430] sm:text-4xl">
+                Hesabım
+            </h1>
+
+            <p class="mt-3 text-sm leading-7 text-[#5E7387]">
+                Profil bilgilerinizi, adreslerinizi, siparişlerinizi ve favorilerinizi yönetin.
+            </p>
+
+        </div>
+
+        <div class="mt-8 grid items-start gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+
+            <!-- SOL MENÜ -->
+            <aside class="rounded-[28px] border border-white/60 bg-white/65 p-4 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl lg:sticky lg:top-[106px]">
+
+                <!-- KULLANICI ÖZETİ -->
+                <div class="mb-4 flex items-center gap-3 border-b border-[#AAB0B7]/25 px-2 pb-4">
+
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-sm font-semibold text-[#1E2430]">
+                        İT
+                    </div>
+
+                    <div class="min-w-0">
+                        <p class="truncate text-sm font-semibold text-[#1E2430]">
+                            İrem Tilkioğlu
+                        </p>
+
+                        <p class="mt-1 truncate text-xs text-[#5E7387]">
+                            irem@example.com
+                        </p>
+                    </div>
+
+                </div>
+
+                <nav class="space-y-2"
+                     aria-label="Hesap menüsü">
+
+                    <button type="button"
+                            data-profile-tab="profile"
+                            class="profile-menu-item flex w-full items-center gap-3 rounded-2xl bg-[#1E2430] px-4 py-3.5 text-left text-sm font-semibold text-white transition">
+
+                        <svg class="h-[18px] w-[18px] shrink-0"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <circle cx="12" cy="8" r="4"></circle>
+                            <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+                        </svg>
+
+                        Profil Bilgileri
+                    </button>
+
+                    <button type="button"
+                            data-profile-tab="addresses"
+                            class="profile-menu-item flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-sm font-medium text-[#5E7387] transition hover:bg-white hover:text-[#1E2430]">
+
+                        <svg class="h-[18px] w-[18px] shrink-0"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"></path>
+                            <circle cx="12" cy="10" r="2.5"></circle>
+                        </svg>
+
+                        Adreslerim
+                    </button>
+
+                    <button type="button"
+                            data-profile-tab="orders"
+                            class="profile-menu-item flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-sm font-medium text-[#5E7387] transition hover:bg-white hover:text-[#1E2430]">
+
+                        <svg class="h-[18px] w-[18px] shrink-0"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M4 7h16"></path>
+                            <path d="M6 7V4h12v3"></path>
+                            <path d="M5 7v13h14V7"></path>
+                            <path d="M9 11h6"></path>
+                        </svg>
+
+                        Siparişlerim
+                    </button>
+
+                    <button type="button"
+                            data-profile-tab="wishlist"
+                            class="profile-menu-item flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-sm font-medium text-[#5E7387] transition hover:bg-white hover:text-[#1E2430]">
+
+                        <svg class="h-[18px] w-[18px] shrink-0"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M12 20.5s-7-4.4-7-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7 3.3c0 5.8-7 10.2-7 10.2Z"></path>
+                        </svg>
+
+                        Favorilerim
+                    </button>
+
+                    <div class="my-3 border-t border-[#AAB0B7]/25"></div>
+
+                    <a asp-controller="Account"
+                       asp-action="Logout"
+                       class="flex w-full items-center gap-3 rounded-2xl px-4 py-3.5 text-left text-sm font-medium text-red-500 transition hover:bg-red-50">
+
+                        <svg class="h-[18px] w-[18px] shrink-0"
+                             viewBox="0 0 24 24"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.8"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             aria-hidden="true">
+                            <path d="M10 17l5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+                            <path d="M14 4h6v16h-6"></path>
+                        </svg>
+
+                        Çıkış Yap
+                    </a>
+
+                </nav>
+
+            </aside>
+
+            <!-- SAĞ İÇERİK -->
+            <div class="min-w-0">
+
+                <!-- PROFİL BİLGİLERİ PANELİ -->
+                <section data-profile-panel="profile"
+                         class="profile-panel rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-7">
+
+                    <div class="flex flex-col gap-5 border-b border-[#AAB0B7]/25 pb-6 sm:flex-row sm:items-center sm:justify-between">
+
+                        <div class="flex items-center gap-4">
+
+                            <div class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-[#E7EDF1] text-xl font-semibold text-[#1E2430]">
+                                İT
+                            </div>
+
+                            <div>
+                                <h2 class="text-2xl font-semibold text-[#1E2430]">
+                                    İrem Tilkioğlu
+                                </h2>
+
+                                <p class="mt-1 text-sm text-[#5E7387]">
+                                    irem@example.com
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <span class="inline-flex w-fit rounded-full border border-[#AAB0B7]/30 bg-white px-4 py-2 text-xs font-semibold text-[#5E7387]">
+                            Demo Hesap
+                        </span>
+
+                    </div>
+
+                    <div class="mt-7 grid gap-5 sm:grid-cols-2">
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Ad
+                            </span>
+
+                            <input type="text"
+                                   value="İrem"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Soyad
+                            </span>
+
+                            <input type="text"
+                                   value="Tilkioğlu"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                E-posta
+                            </span>
+
+                            <input type="email"
+                                   value="irem@example.com"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-medium text-[#1E2430]">
+                                Telefon
+                            </span>
+
+                            <input type="tel"
+                                   value="05xx xxx xx xx"
+                                   class="h-12 w-full rounded-[18px] border border-[#AAB0B7]/35 bg-white px-4 text-sm text-[#1E2430] outline-none transition focus:border-[#3F5F7A] focus:ring-2 focus:ring-[#3F5F7A]/15" />
+                        </label>
+
+                    </div>
+
+                    <div class="mt-7 flex justify-end">
+
+                        <button type="button"
+                                class="rounded-full bg-[#1E2430] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                            Değişiklikleri Kaydet
+                        </button>
+
+                    </div>
+
+                </section>
+
+                <!-- ADRESLER PANELİ -->
+                <section data-profile-panel="addresses"
+                         class="profile-panel hidden rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-7">
+
+                    <div class="flex flex-col gap-4 border-b border-[#AAB0B7]/25 pb-6 sm:flex-row sm:items-center sm:justify-between">
+
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                                Teslimat Bilgileri
+                            </p>
+
+                            <h2 class="mt-2 text-2xl font-semibold text-[#1E2430]">
+                                Adreslerim
+                            </h2>
+
+                            <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                                Kayıtlı teslimat ve fatura adreslerinizi yönetin.
+                            </p>
+                        </div>
+
+                        <button type="button"
+                                class="inline-flex w-fit items-center justify-center rounded-full bg-[#1E2430] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                            + Yeni Adres Ekle
+                        </button>
+
+                    </div>
+
+                    <div class="mt-6 grid gap-5 md:grid-cols-2">
+
+                        <article class="rounded-[22px] border border-[#1E2430] bg-white p-5">
+
+                            <div class="flex items-start justify-between gap-4">
+
+                                <div>
+                                    <div class="flex items-center gap-2">
+
+                                        <h3 class="font-semibold text-[#1E2430]">
+                                            Ev Adresim
+                                        </h3>
+
+                                        <span class="rounded-full bg-[#E7EDF1] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#3F5F7A]">
+                                            Varsayılan
+                                        </span>
+
+                                    </div>
+
+                                    <p class="mt-4 text-sm leading-7 text-[#5E7387]">
+                                        Örnek Mahallesi, Çalışma Sokak No: 24, Daire: 5
+                                        <br />
+                                        Kadıköy / İstanbul
+                                        <br />
+                                        34710
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="mt-5 flex items-center gap-4 border-t border-[#AAB0B7]/25 pt-4">
+
+                                <button type="button"
+                                        class="text-sm font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                                    Düzenle
+                                </button>
+
+                                <button type="button"
+                                        class="text-sm font-semibold text-red-500 transition hover:text-red-600">
+                                    Sil
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                        <article class="rounded-[22px] border border-[#AAB0B7]/30 bg-white/70 p-5">
+
+                            <h3 class="font-semibold text-[#1E2430]">
+                                İş Adresim
+                            </h3>
+
+                            <p class="mt-4 text-sm leading-7 text-[#5E7387]">
+                                Teknoloji Mahallesi, Tasarım Caddesi No: 18
+                                <br />
+                                Ataşehir / İstanbul
+                                <br />
+                                34758
+                            </p>
+
+                            <div class="mt-5 flex items-center gap-4 border-t border-[#AAB0B7]/25 pt-4">
+
+                                <button type="button"
+                                        class="text-sm font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                                    Düzenle
+                                </button>
+
+                                <button type="button"
+                                        class="text-sm font-semibold text-red-500 transition hover:text-red-600">
+                                    Sil
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+                <!-- SİPARİŞLER PANELİ -->
+                <section data-profile-panel="orders"
+                         class="profile-panel hidden rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-7">
+
+                    <div class="border-b border-[#AAB0B7]/25 pb-6">
+
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                            Sipariş Geçmişi
+                        </p>
+
+                        <h2 class="mt-2 text-2xl font-semibold text-[#1E2430]">
+                            Siparişlerim
+                        </h2>
+
+                        <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                            Geçmiş ve devam eden siparişlerinizi görüntüleyin.
+                        </p>
+
+                    </div>
+
+                    <div class="mt-6 space-y-5">
+
+                        <article class="rounded-[22px] border border-[#AAB0B7]/25 bg-white/75 p-5">
+
+                            <div class="flex flex-col gap-4 border-b border-[#AAB0B7]/25 pb-4 sm:flex-row sm:items-center sm:justify-between">
+
+                                <div>
+                                    <p class="text-xs font-semibold uppercase tracking-[0.15em] text-[#5E7387]">
+                                        Sipariş No
+                                    </p>
+
+                                    <p class="mt-1 font-semibold text-[#1E2430]">
+                                        DSK-202608061245
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+
+                                    <span class="rounded-full bg-[#E7F4EC] px-3 py-1.5 text-xs font-semibold text-[#34724B]">
+                                        Hazırlanıyor
+                                    </span>
+
+                                    <span class="font-semibold text-[#1E2430]">
+                                        ₺3.647
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                                <div class="flex items-center gap-3">
+
+                                    <div class="h-16 w-16 overflow-hidden rounded-[14px] bg-[#F5F5F3]">
+                                        <div class="flex h-full items-center justify-center text-xs text-[#5E7387]">
+                                            Ürün
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-sm font-semibold text-[#1E2430]">
+                                            Aura Monitör Standı
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-[#5E7387]">
+                                            Black • 1 adet
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-[#5E7387]">
+                                            6 Ağustos 2026
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <button type="button"
+                                        class="inline-flex w-fit rounded-full border border-[#AAB0B7]/35 bg-white px-5 py-2.5 text-sm font-semibold text-[#1E2430] transition hover:border-[#3F5F7A]">
+                                    Sipariş Detayı
+                                </button>
+
+                            </div>
+
+                        </article>
+
+                        <article class="rounded-[22px] border border-[#AAB0B7]/25 bg-white/75 p-5">
+
+                            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                                <div>
+                                    <p class="text-sm font-semibold text-[#1E2430]">
+                                        DSK-202607201128
+                                    </p>
+
+                                    <p class="mt-1 text-xs text-[#5E7387]">
+                                        20 Temmuz 2026 • 2 ürün
+                                    </p>
+                                </div>
+
+                                <div class="flex items-center gap-4">
+
+                                    <span class="rounded-full bg-[#E7EDF1] px-3 py-1.5 text-xs font-semibold text-[#3F5F7A]">
+                                        Teslim Edildi
+                                    </span>
+
+                                    <span class="font-semibold text-[#1E2430]">
+                                        ₺2.098
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+                <!-- FAVORİLER PANELİ -->
+                <section data-profile-panel="wishlist"
+                         class="profile-panel hidden rounded-[28px] border border-white/60 bg-white/65 p-5 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur-xl sm:p-7">
+
+                    <div class="border-b border-[#AAB0B7]/25 pb-6">
+
+                        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                            Kaydedilen Ürünler
+                        </p>
+
+                        <h2 class="mt-2 text-2xl font-semibold text-[#1E2430]">
+                            Favorilerim
+                        </h2>
+
+                        <p class="mt-2 text-sm leading-6 text-[#5E7387]">
+                            Daha sonra incelemek için kaydettiğiniz ürünlere ulaşın.
+                        </p>
+
+                    </div>
+
+                    <div class="mt-7 rounded-[24px] border border-[#AAB0B7]/25 bg-white/55 px-6 py-10 text-center">
+
+                        <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#E7EDF1] text-[#3F5F7A]">
+
+                            <svg class="h-6 w-6"
+                                 viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="1.8"
+                                 stroke-linecap="round"
+                                 stroke-linejoin="round"
+                                 aria-hidden="true">
+                                <path d="M12 20.5s-7-4.4-7-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7 3.3c0 5.8-7 10.2-7 10.2Z"></path>
+                            </svg>
+
+                        </div>
+
+                        <h3 class="mt-5 text-xl font-semibold text-[#1E2430]">
+                            Favori ürünlerinizi görüntüleyin
+                        </h3>
+
+                        <p class="mx-auto mt-2 max-w-md text-sm leading-7 text-[#5E7387]">
+                            Favoriler sayfasında kaydettiğiniz ürünleri inceleyebilir, sepetinize ekleyebilir veya kaldırabilirsiniz.
+                        </p>
+
+                        <a asp-controller="Wishlist"
+                           asp-action="Index"
+                           class="mt-6 inline-flex rounded-full bg-[#1E2430] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+                            Favorilerime Git
+                        </a>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const menuItems = Array.from(
+                document.querySelectorAll(".profile-menu-item")
+            );
+
+            const panels = Array.from(
+                document.querySelectorAll(".profile-panel")
+            );
+
+            const activateTab = (tabName) => {
+                menuItems.forEach((menuItem) => {
+                    const isActive =
+                        menuItem.dataset.profileTab === tabName;
+
+                    menuItem.classList.toggle(
+                        "bg-[#1E2430]",
+                        isActive
+                    );
+
+                    menuItem.classList.toggle(
+                        "text-white",
+                        isActive
+                    );
+
+                    menuItem.classList.toggle(
+                        "font-semibold",
+                        isActive
+                    );
+
+                    menuItem.classList.toggle(
+                        "text-[#5E7387]",
+                        !isActive
+                    );
+
+                    menuItem.classList.toggle(
+                        "font-medium",
+                        !isActive
+                    );
+
+                    menuItem.setAttribute(
+                        "aria-pressed",
+                        isActive.toString()
+                    );
+                });
+
+                panels.forEach((panel) => {
+                    const isActive =
+                        panel.dataset.profilePanel === tabName;
+
+                    panel.classList.toggle(
+                        "hidden",
+                        !isActive
+                    );
+                });
+
+                window.history.replaceState(
+                    null,
+                    "",
+                    `#${tabName}`
+                );
+            };
+
+            menuItems.forEach((menuItem) => {
+                menuItem.addEventListener("click", () => {
+                    activateTab(
+                        menuItem.dataset.profileTab
+                    );
+                });
+            });
+
+            const requestedTab =
+                window.location.hash.replace("#", "");
+
+            const availableTabs = menuItems.map(
+                (menuItem) => menuItem.dataset.profileTab
+            );
+
+            if (availableTabs.includes(requestedTab)) {
+                activateTab(requestedTab);
+            } else {
+                activateTab("profile");
+            }
+        });
+    </script>
+}

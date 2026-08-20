@@ -1,0 +1,17 @@
+# .NET build files
+bin/
+obj/
+
+# Node dependencies
+node_modules/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Visual Studio / VS Code
+.vs/
+.vscode/
+
+# Logs
+*.log

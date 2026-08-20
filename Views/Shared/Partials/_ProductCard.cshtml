@@ -1,0 +1,190 @@
+@model deskly_ui.Models.Product
+@inject deskly_ui.Services.WishlistService WishlistService
+
+<article class="product-card group relative flex h-full min-w-0 flex-col overflow-hidden rounded-[28px] border border-white/60 bg-white/75 p-4 shadow-[0_16px_45px_rgba(30,36,48,0.07)] backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_24px_60px_rgba(30,36,48,0.12)]">
+
+    <div class="relative h-[290px] shrink-0 overflow-hidden rounded-[22px] bg-[#F5F5F3]">
+
+        <div class="absolute left-4 top-4 z-10">
+            @if (Model.IsNew)
+            {
+                <span class="rounded-full bg-[#1E2430] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
+                    Yeni
+                </span>
+            }
+            else if (Model.IsBestSeller)
+            {
+                <span class="rounded-full bg-[#3F5F7A] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
+                    Çok Satan
+                </span>
+            }
+        </div>
+
+    @{
+    var isFavorite = WishlistService.Exists(Model.Id);
+}
+
+<form asp-controller="Wishlist"
+      asp-action="@(isFavorite ? "Remove" : "Add")"
+      method="post"
+      class="wishlist-toggle-form absolute right-4 top-4 z-10"
+      data-product-id="@Model.Id"
+      data-is-favorite="@isFavorite.ToString().ToLowerInvariant()">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="productId"
+           value="@Model.Id" />
+
+    <button type="submit"
+            title="@(isFavorite ? "Favorilerden kaldır" : "Favorilere ekle")"
+            aria-label="@(isFavorite
+                ? $"{Model.Name} ürününü favorilerden kaldır"
+                : $"{Model.Name} ürününü favorilere ekle")"
+            class="flex h-10 w-10 items-center justify-center rounded-full border border-white/70 bg-white/85 text-[#1E2430] shadow-sm backdrop-blur transition hover:scale-105 hover:bg-white">
+
+       <svg class="wishlist-heart-icon h-5 w-5"
+             viewBox="0 0 24 24"
+             fill="@(isFavorite ? "currentColor" : "none")"
+             stroke="currentColor"
+             stroke-width="1.8"
+             stroke-linecap="round"
+             stroke-linejoin="round"
+             aria-hidden="true">
+
+            <path d="M12 20.5s-7-4.4-7-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7 3.3c0 5.8-7 10.2-7 10.2Z"></path>
+
+        </svg>
+
+    </button>
+
+</form>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl"
+                 alt="@Model.Name"
+                 class="product-card-image h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+        }
+        else
+        {
+            <div class="flex h-full items-center justify-center text-sm text-[#5E7387]">
+                Ürün görseli
+            </div>
+        }
+
+    </div>
+
+    <div class="flex flex-1 flex-col px-1 pb-1 pt-5">
+
+        <div class="flex items-start justify-between gap-4">
+
+            <div class="min-w-0 flex-1">
+                <p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#5E7387]">
+                    @Model.Category
+                </p>
+
+                <h3 class="mt-2 min-h-[56px] text-xl font-semibold leading-7 tracking-tight text-[#1E2430]">
+                    @Model.Name
+                </h3>
+            </div>
+
+            <div class="shrink-0 text-right">
+                @if (Model.OldPrice.HasValue)
+                {
+                    <p class="text-xs text-[#7A8794] line-through">
+                        ₺@Model.OldPrice.Value.ToString("N0")
+                    </p>
+                }
+
+                <p class="mt-1 whitespace-nowrap text-xl font-semibold text-[#1E2430]">
+                    ₺@Model.Price.ToString("N0")
+                </p>
+            </div>
+
+        </div>
+
+        <p class="mt-2 min-h-[44px] text-sm leading-6 text-[#5E7387]">
+            @Model.ShortDescription
+        </p>
+
+        @if (Model.Variants.Any())
+        {
+            <div class="mt-4 min-h-[72px]">
+
+                <p class="selected-variant-name text-xs font-medium text-[#5E7387]">
+                    @Model.Variants.First().ColorName
+                </p>
+
+                <div class="mt-3 flex items-center gap-3">
+                    @foreach (var variant in Model.Variants)
+                    {
+                        <button type="button"
+                                title="@variant.ColorName"
+                                aria-label="@variant.ColorName rengini seç"
+                                aria-pressed="false"
+                                data-variant-image="@variant.ImageUrl"
+                                data-variant-name="@variant.ColorName"
+                                class="product-card-variant relative h-7 w-7 rounded-full border-2 border-white shadow-sm ring-1 ring-[#AAB0B7]/50 transition duration-200 hover:scale-110"
+                                style="background-color:@variant.ColorCode">
+
+                            <span class="product-card-variant-check pointer-events-none absolute inset-0 hidden items-center justify-center text-[10px] font-bold text-white drop-shadow">
+                                ✓
+                            </span>
+
+                        </button>
+                    }
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="min-h-[72px]"></div>
+        }
+
+        <div class="mt-4 flex items-center justify-between gap-3 border-t border-[#AAB0B7]/25 pt-4">
+
+            <a asp-controller="Products"
+               asp-action="Detail"
+               asp-route-id="@Model.Id"
+               class="inline-flex items-center gap-2 text-sm font-semibold text-[#1E2430] transition hover:text-[#3F5F7A]">
+                Ürünü İncele
+                <span class="transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                </span>
+            </a>
+
+           <form asp-controller="Cart"
+      asp-action="Add"
+      method="post"
+      class="shrink-0">
+
+    @Html.AntiForgeryToken()
+
+    <input type="hidden"
+           name="productId"
+           value="@Model.Id" />
+
+    <input type="hidden"
+           name="quantity"
+           value="1" />
+
+    <input type="hidden"
+           name="selectedColor"
+           class="product-card-selected-color"
+           value="@(Model.Variants.FirstOrDefault()?.ColorName ?? string.Empty)" />
+
+    <button type="submit"
+            class="rounded-full bg-[#1E2430] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#3F5F7A]">
+        Sepete Ekle
+    </button>
+
+</form>
+
+        </div>
+
+    </div>
+
+</article>

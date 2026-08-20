@@ -1,0 +1,26 @@
+@model deskly_ui.Models.BlogPost
+
+<article class="group rounded-[24px] bg-white/70 p-4 backdrop-blur transition hover:-translate-y-1 hover:shadow-lg">
+    <div class="aspect-[4/3] rounded-[18px] bg-[#D7E1E8]"></div>
+
+    <div class="mt-4">
+        <span class="inline-flex rounded-full bg-[#AAB0B7]/20 px-3 py-1 text-xs font-medium text-[#5E7387]">
+            @Model.Category
+        </span>
+
+        <h3 class="mt-3 text-lg font-semibold text-[#1E2430]">
+            @Model.Title
+        </h3>
+
+        <p class="mt-2 text-sm leading-7 text-[#5E7387]">
+            @Model.Summary
+        </p>
+
+        <a asp-controller="Blog"
+           asp-action="Detail"
+           asp-route-id="@Model.Id"
+           class="mt-4 inline-flex text-sm font-semibold text-[#3F5F7A] hover:underline">
+            Devamını Oku
+        </a>
+    </div>
+</article>
