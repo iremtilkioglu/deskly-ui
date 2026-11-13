@@ -75,11 +75,44 @@ public class CartController : Controller
             return NotFound();
         }
 
+        if (quantity < 1 || quantity > 99)
+        {
+            return BadRequest("Invalid product quantity.");
+        }
+
+        if (product.Variants.Count > 0)
+        {
+            var validColor = product.Variants.Any(variant =>
+                string.Equals(
+                    variant.ColorName,
+                    selectedColor,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (!validColor)
+            {
+                return BadRequest("Invalid product color.");
+            }
+        }
+        else if (!string.IsNullOrWhiteSpace(selectedColor))
+        {
+            return BadRequest("This product has no color variants.");
+        }
+
         _cartService.AddProduct(
             product,
             quantity,
             selectedColor
         );
+
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            return Json(new
+            {
+                success = true,
+                cartCount = _cartService.GetTotalQuantity(),
+                message = "Ürün sepete eklendi."
+            });
+        }
 
         return RedirectToAction(nameof(Index));
     }

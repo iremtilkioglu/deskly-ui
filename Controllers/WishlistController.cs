@@ -26,7 +26,9 @@ public class WishlistController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Add(int productId)
+    public IActionResult Add(
+        int productId,
+        string? selectedColor = null)
     {
         var product = _productService
             .GetAllProducts()
@@ -37,7 +39,12 @@ public class WishlistController : Controller
             return NotFound();
         }
 
-        _wishlistService.Add(product);
+        if (!IsValidColor(product, selectedColor))
+        {
+            return BadRequest("Invalid product color.");
+        }
+
+        _wishlistService.Add(product, selectedColor);
 
         if (IsAjaxRequest())
         {
@@ -54,9 +61,24 @@ public class WishlistController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Remove(int productId)
+    public IActionResult Remove(
+        int productId,
+        string? selectedColor = null)
     {
-        _wishlistService.Remove(productId);
+        var product = _productService.GetAllProducts()
+            .FirstOrDefault(item => item.Id == productId);
+
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        if (!IsValidColor(product, selectedColor))
+        {
+            return BadRequest("Invalid product color.");
+        }
+
+        _wishlistService.Remove(productId, selectedColor);
 
         if (IsAjaxRequest())
         {
@@ -78,6 +100,27 @@ public class WishlistController : Controller
         _wishlistService.Clear();
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private static bool IsValidColor(
+        deskly_ui.Models.Product product,
+        string? selectedColor)
+    {
+        if (product.Variants.Count == 0)
+        {
+            return string.IsNullOrWhiteSpace(selectedColor);
+        }
+
+        if (string.IsNullOrWhiteSpace(selectedColor))
+        {
+            return true;
+        }
+
+        return product.Variants.Any(variant =>
+            string.Equals(
+                variant.ColorName,
+                selectedColor,
+                StringComparison.OrdinalIgnoreCase));
     }
 
     private bool IsAjaxRequest()

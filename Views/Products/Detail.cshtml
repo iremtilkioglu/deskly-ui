@@ -24,7 +24,13 @@
 <form asp-controller="Wishlist"
       asp-action="@(isFavorite ? "Remove" : "Add")"
       method="post"
-      class="absolute right-5 top-5 z-20">
+      class="wishlist-detail-form absolute right-5 top-5 z-20"
+      data-product-name="@Model.Name"
+      data-favorite-colors="@(System.Text.Json.JsonSerializer.Serialize(
+          Model.Variants
+              .Where(variant => WishlistService.Exists(Model.Id, variant.ColorName))
+              .Select(variant => variant.ColorName)
+              .ToArray()))">
 
     @Html.AntiForgeryToken()
 
@@ -32,11 +38,16 @@
            name="productId"
            value="@Model.Id" />
 
+    <input type="hidden"
+           name="selectedColor"
+           class="wishlist-detail-selected-color"
+           value="@(Model.Variants.FirstOrDefault()?.ColorName ?? string.Empty)" />
+
     <button type="submit"
             class="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition hover:scale-105">
 
         <svg xmlns="http://www.w3.org/2000/svg"
-             class="h-6 w-6 text-[#1E2430]"
+             class="wishlist-detail-heart h-6 w-6 text-[#1E2430]"
              fill="@(isFavorite ? "currentColor" : "none")"
              viewBox="0 0 24 24"
              stroke="currentColor"
@@ -372,8 +383,59 @@ const selectedColorInput = document.getElementById("selectedColorInput");
                     selectedColorName.textContent = variantName;
                 }
                 if (selectedColorInput && variantName) {
-    selectedColorInput.value = variantName;
-}
+                    selectedColorInput.value = variantName;
+                }
+
+                const wishlistForm =
+                    document.querySelector(".wishlist-detail-form");
+
+                if (wishlistForm && variantName) {
+                    const wishlistColorInput =
+                        wishlistForm.querySelector(
+                            ".wishlist-detail-selected-color"
+                        );
+
+                    if (wishlistColorInput) {
+                        wishlistColorInput.value = variantName;
+                    }
+
+                    const favoriteColors = JSON.parse(
+                        wishlistForm.dataset.favoriteColors || "[]"
+                    );
+
+                    const isFavorite =
+                        favoriteColors.includes(variantName);
+
+                    wishlistForm.action = isFavorite
+                        ? "/Wishlist/Remove"
+                        : "/Wishlist/Add";
+
+                    const heart =
+                        wishlistForm.querySelector(".wishlist-detail-heart");
+
+                    heart?.setAttribute(
+                        "fill",
+                        isFavorite ? "currentColor" : "none"
+                    );
+
+                    const favoriteButton =
+                        wishlistForm.querySelector('button[type="submit"]');
+
+                    if (favoriteButton) {
+                        favoriteButton.title = isFavorite
+                            ? "Favorilerden kaldır"
+                            : "Favorilere ekle";
+
+                        favoriteButton.setAttribute(
+                            "aria-label",
+                            `${wishlistForm.dataset.productName} ${variantName} rengini ${
+                                isFavorite
+                                    ? "favorilerden kaldır"
+                                    : "favorilere ekle"
+                            }`
+                        );
+                    }
+                }
             };
 
             variantButtons.forEach((button) => {
@@ -387,29 +449,131 @@ const selectedColorInput = document.getElementById("selectedColorInput");
                 setSelectedVariant(variantButtons[0]);
             }
 
+            // Favori ekleme / kaldırma (AJAX)
+            const wishlistForm =
+                document.querySelector(".wishlist-detail-form");
+
+            wishlistForm?.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const button = wishlistForm.querySelector(
+                    'button[type="submit"]'
+                );
+
+                const heart = wishlistForm.querySelector(
+                    ".wishlist-detail-heart"
+                );
+
+                if (!button || !heart || button.disabled) {
+                    return;
+                }
+
+                button.disabled = true;
+
+                const selectedColor = wishlistForm.querySelector(
+                    ".wishlist-detail-selected-color"
+                )?.value;
+
+                try {
+                    const response = await fetch(wishlistForm.action, {
+                        method: "POST",
+                        body: new FormData(wishlistForm),
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest",
+                            "Accept": "application/json"
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("Favori işlemi başarısız oldu.");
+                    }
+
+                    const result = await response.json();
+
+                    if (!result.success) {
+                        throw new Error("Favori işlemi başarısız oldu.");
+                    }
+
+                    const favoriteColors = JSON.parse(
+                        wishlistForm.dataset.favoriteColors || "[]"
+                    );
+
+                    const index = favoriteColors.indexOf(selectedColor);
+
+                    if (result.isFavorite && index === -1) {
+                        favoriteColors.push(selectedColor);
+                    } else if (!result.isFavorite && index !== -1) {
+                        favoriteColors.splice(index, 1);
+                    }
+
+                    wishlistForm.dataset.favoriteColors =
+                        JSON.stringify(favoriteColors);
+
+                    // İşlem sırasında renk değişmişse mevcut seçimi koru.
+                    const currentColor = wishlistForm.querySelector(
+                        ".wishlist-detail-selected-color"
+                    )?.value;
+
+                    const isCurrentFavorite =
+                        favoriteColors.includes(currentColor);
+
+                    wishlistForm.action = isCurrentFavorite
+                        ? "/Wishlist/Remove"
+                        : "/Wishlist/Add";
+
+                    heart.setAttribute(
+                        "fill",
+                        isCurrentFavorite ? "currentColor" : "none"
+                    );
+
+                    button.title = isCurrentFavorite
+                        ? "Favorilerden kaldır"
+                        : "Favorilere ekle";
+
+                    button.setAttribute(
+                        "aria-label",
+                        button.title
+                    );
+
+                    document.querySelectorAll(
+                        ".wishlist-count-badge"
+                    ).forEach((badge) => {
+                        badge.textContent = result.count;
+                        badge.classList.toggle(
+                            "hidden",
+                            result.count === 0
+                        );
+                    });
+                } catch (error) {
+                    console.error("Wishlist error:", error);
+                } finally {
+                    button.disabled = false;
+                }
+            });
+
             // Aynı anda yalnızca bir bilgi bölümü açık kalsın
             detailSections.forEach((detail) => {
-    detail.addEventListener("toggle", () => {
-        if (!detail.open) {
-            return;
-        }
+                detail.addEventListener("toggle", () => {
+                    if (!detail.open) {
+                        return;
+                    }
 
-        // Aynı anda sadece bir bölüm açık kalsın
-        detailSections.forEach((otherDetail) => {
-            if (otherDetail !== detail) {
-                otherDetail.open = false;
-            }
-        });
+                    // Aynı anda sadece bir bölüm açık kalsın
+                    detailSections.forEach((otherDetail) => {
+                        if (otherDetail !== detail) {
+                            otherDetail.open = false;
+                        }
+                    });
 
-        // Açılan bölümü masaüstü ve mobilde görünür alana getir
-        window.setTimeout(() => {
-            detail.scrollIntoView({
-                behavior: "smooth",
-                block: "center"
+                    // Açılan bölümü masaüstü ve mobilde görünür alana getir
+                    window.setTimeout(() => {
+                        detail.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+                    }, 150);
+                });
             });
-        }, 150);
-    });
-});
         });
     </script>
 }
