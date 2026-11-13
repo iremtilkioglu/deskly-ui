@@ -4,11 +4,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 // MVC
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 // Uygulama servisleri
-builder.Services.AddSingleton<CartService>();
+builder.Services.AddScoped<CartService>();
 builder.Services.AddSingleton<ProductService>();
-builder.Services.AddSingleton<WishlistService>();
+builder.Services.AddScoped<WishlistService>();
 
 // Demo giriş durumu için Session
 builder.Services.AddDistributedMemoryCache();
